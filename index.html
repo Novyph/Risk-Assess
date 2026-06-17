@@ -1770,7 +1770,7 @@ function resolveField(selectId, otherId) {
 const STORE_KEY = 'cmco_blitz_tasks_v1';
 const DRAFT_KEY = 'cmco_blitz_draft_v1';
 
-const SHAREPOINT_WEBHOOK_URL = 'https://ea6430473e5ee4109f1c7dfe1fb37b.13.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/da8256e78eca4088bc19ede1f0c90312/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bCqkr4WYMUaSuFspCyLNe29FGq3UMvEleue8ymJ6wl0';
+const SHAREPOINT_WEBHOOK_URL = 'https://ea6430473e5ee4109f1c7dfe1fb37b.13.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/dcd6aea2d03040d7b29f58e0e1a37932/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=5_8f61CTSOpuRUu2XE4dtWRCIXJ2uzuxRAxdfREavD0';
 let sessionTasks = [];
 let editingIndex = -1;  // -1 = not editing; otherwise the index of the task being edited
 
@@ -2213,25 +2213,29 @@ async function _doFetch(payload) {
   const SEND_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`;
   const SPIN_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin .8s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
   btn.innerHTML = `${SPIN_ICON} Submitting…`; btn.disabled = true;
+
   try {
-    const res = await fetch(SHAREPOINT_WEBHOOK_URL, {
+    // Save the exact payload locally so you can inspect/copy it for Power Automate testing.
+    try { localStorage.setItem('cmco_last_submit_payload', JSON.stringify(payload, null, 2)); } catch(e) {}
+
+    // Power Automate HTTP trigger URLs often block normal browser CORS/preflight requests.
+    // Using no-cors + text/plain sends the JSON body as a simple POST without the blocked OPTIONS preflight.
+    await fetch(SHAREPOINT_WEBHOOK_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      mode: 'no-cors',
+      cache: 'no-store',
+      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
       body: JSON.stringify(payload)
     });
-    if (res.ok) {
-      btn.innerHTML = `Submit ${SEND_ICON}`; btn.disabled = false;
-      _lastPayload = null;
-      showSuccessOverlay();
-    } else {
-      throw new Error(`Server returned HTTP ${res.status} — the form may not have been received.`);
-    }
+
+    // no-cors responses are intentionally opaque, so the browser cannot read HTTP status.
+    // If Power Automate/Dataverse has an error, check the flow Run History.
+    btn.innerHTML = `Submit ${SEND_ICON}`; btn.disabled = false;
+    _lastPayload = null;
+    showSuccessOverlay();
   } catch (e) {
     btn.innerHTML = `Submit ${SEND_ICON}`; btn.disabled = false;
-    const isNetwork = e instanceof TypeError;
-    showErrorBanner(isNetwork
-      ? 'No response from server. Check your network connection and try again.'
-      : e.message);
+    showErrorBanner('The browser could not send the request. Check the Power Automate HTTP URL and your network connection. Last payload was saved in this browser as cmco_last_submit_payload.');
   }
 }
 
