@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMCO EHS — Risk Assessment Form</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:        #185FA5;
+  --blue-dark:   #0D3D6E;
+  --blue-mid:    #2774C2;
+  --blue-light:  #D6E8F5;
+  --blue-xlight: #EAF3FB;
+  --red:         #C0392B;
+  --red-light:   #FCEBEB;
+  --amber:       #D68910;
+  --amber-light: #FEF4DC;
+  --green:       #1E8449;
+  --green-light: #EAF3DE;
+  --gray-50:     #F8F9FA;
+  --gray-100:    #F2F4F6;
+  --gray-200:    #E4E8EC;
+  --gray-400:    #9AA5B1;
+  --gray-600:    #4A5568;
+  --gray-800:    #1A202C;
+  --white:       #FFFFFF;
+  --font:        'DM Sans', sans-serif;
+  --mono:        'DM Mono', monospace;
+  --radius:      6px;
+  --shadow-sm:   0 1px 3px rgba(0,0,0,.08);
+  --shadow:      0 2px 8px rgba(0,0,0,.10);
+}
+
+body {
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--gray-800);
+  background: #C8D4E0;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SCREEN LAYOUT ────────────────────────────────────────── */
+.page-shell {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 60px;
+}
+
+/* ── TOP NAV BAR ──────────────────────────────────────────── */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--blue-dark);
+  color: var(--white);
+  padding: 10px 20px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+.top-bar .brand { font-weight: 600; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+.top-bar .meta  { color: rgba(255,255,255,.65); }
+
+/* ── FORM CARD ────────────────────────────────────────────── */
+.form-card {
+  background: var(--white);
+  border: 1px solid #B0BECE;
+  border-radius: 0 0 var(--radius) var(--radius);
+  box-shadow: 0 6px 24px rgba(13,61,110,.18);
+  overflow: hidden;
+}
+
+/* ── FORM HEADER ──────────────────────────────────────────── */
+.form-header {
+  background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 100%);
+  padding: 28px 32px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.form-header::after {
+  content: '';
+  position: absolute;
+  right: -30px; top: -30px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.04);
+}
+.form-header h1 { font-size: 22px; font-weight: 700; color: var(--white); letter-spacing: -.01em; margin-bottom: 4px; }
+.form-header .sub { font-size: 13px; color: rgba(255,255,255,.7); margin-bottom: 18px; }
+.header-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+.header-field label { display: block; font-size: 10px; font-weight: 600; color: rgba(255,255,255,.55); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 4px; }
+.header-field input { width: 100%; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); border-radius: 4px; padding: 6px 10px; color: var(--white); font-family: var(--font); font-size: 13px; }
+.header-field input::placeholder { color: rgba(255,255,255,.35); }
+.header-field input:focus { outline: none; background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.5); }
+
+/* ── LIVE SCORE BAR ───────────────────────────────────────── */
+.score-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--gray-200);
+}
+.score-tile {
+  padding: 12px 16px;
+  text-align: center;
+  border-right: 1px solid var(--gray-200);
+}
+.score-tile:last-child { border-right: none; }
+.score-tile .val { font-size: 22px; font-weight: 600; line-height: 1; color: var(--blue); }
+.score-tile .val.haz { color: var(--red); }
+.score-tile .val.high { color: var(--red); }
+.score-tile .val.med  { color: var(--amber); }
+.score-tile .val.low  { color: var(--green); }
+.score-tile .key { font-size: 11px; color: var(--gray-400); margin-top: 3px; font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
+
+/* ── SECTION HEADERS ──────────────────────────────────────── */
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: var(--blue);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.section-head .num {
+  width: 22px; height: 22px;
+  background: rgba(255,255,255,.18);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.section-head .chevron { margin-left: auto; transition: transform .2s; font-size: 14px; }
+.section-head.collapsed .chevron { transform: rotate(-90deg); }
+.section-body { padding: 20px 24px; }
+.section-body.hidden { display: none; }
+
+/* ── FIELD GRID ───────────────────────────────────────────── */
+.field-grid { display: grid; gap: 14px; margin-bottom: 14px; }
+.col-1 { grid-template-columns: 1fr; }
+.col-2 { grid-template-columns: 1fr 1fr; }
+.col-3 { grid-template-columns: 1fr 1fr 1fr; }
+.col-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.col-2-1 { grid-template-columns: 2fr 1fr; }
+.col-1-2 { grid-template-columns: 1fr 2fr; }
+@media(max-width:680px) { .col-2,.col-3,.col-4,.col-2-1,.col-1-2 { grid-template-columns: 1fr; } }
+
+.field { display: flex; flex-direction: column; gap: 3px; }
+.field label { font-size: 11px; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: .05em; }
+.req { color: var(--red); font-weight: 700; margin-left: 3px; }
+.field .hint { font-size: 11px; color: var(--gray-400); font-style: italic; line-height: 1.4; }
+.ppe-check, .chk-line { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; cursor: pointer; padding: 6px 0 0; }
+.ppe-check input[type=checkbox], .chk-line input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--blue); cursor: pointer; flex-shrink: 0; }
+.field input, .field select, .field textarea {
+  font-family: var(--font); font-size: 13px;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 7px 10px;
+  background: var(--white);
+  color: var(--gray-800);
+  transition: border-color .15s, box-shadow .15s;
+  width: 100%;
+}
+.field textarea { resize: vertical; min-height: 64px; line-height: 1.5; }
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none;
+  border-color: var(--blue-mid);
+  box-shadow: 0 0 0 3px rgba(24,95,165,.12);
+}
+.field select:disabled { opacity: .4; cursor: not-allowed; background: var(--gray-100); }
+
+/* ── TOGGLE YES/NO ────────────────────────────────────────── */
+.yn-row {
+  display: flex; align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--gray-100);
+  gap: 12px;
+}
+.yn-row:last-child { border-bottom: none; }
+.yn-lbl { flex: 1; }
+.yn-lbl strong { font-size: 13px; font-weight: 600; display: block; }
+.yn-lbl span   { font-size: 11px; color: var(--gray-400); font-style: italic; line-height: 1.4; }
+.yn-btns { display: flex; gap: 4px; flex-shrink: 0; margin-top: 2px; }
+.yn-btn {
+  padding: 3px 14px; border: 1px solid var(--gray-200); border-radius: 4px;
+  font-family: var(--font); font-size: 12px; font-weight: 600;
+  cursor: pointer; background: var(--white); color: var(--gray-600);
+  transition: all .12s;
+}
+.yn-btn.active-yes { background: var(--red-light); color: var(--red); border-color: #F0AAAA; }
+.yn-btn.active-no  { background: var(--green-light); color: var(--green); border-color: #97C45A; }
+.yn-btn.active-gen { background: var(--blue-light); color: var(--blue-dark); border-color: var(--blue-mid); }
+.yn-expand {
+  display: none;
+  background: #FFF8F8;
+  border-left: 3px solid var(--red);
+  margin: 4px 0 8px;
+  padding: 12px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.yn-expand.open { display: block; }
+.yn-expand-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media(max-width:580px) { .yn-expand-grid { grid-template-columns: 1fr; } }
+.yn-expand label { font-size: 11px; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: .05em; display: block; margin-bottom: 3px; }
+.yn-expand textarea {
+  width: 100%; font-family: var(--font); font-size: 12px;
+  border: 1px solid var(--gray-200); border-radius: 4px;
+  padding: 6px 8px; resize: vertical; min-height: 52px; line-height: 1.4;
+}
+.yn-expand textarea:focus { outline: none; border-color: var(--blue-mid); }
+
+/* ── HAZ GROUP HEADER ─────────────────────────────────────── */
+.haz-group-title {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--blue);
+  padding: 10px 0 6px;
+  border-bottom: 1px solid var(--blue-light);
+  margin-bottom: 4px; margin-top: 16px;
+}
+.haz-group-title:first-child { margin-top: 0; }
+
+/* ── PERMIT ROWS ──────────────────────────────────────────── */
+.permit-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--gray-100);
+}
+.permit-row:last-child { border-bottom: none; }
+.permit-lbl { flex: 1; }
+.permit-lbl strong { font-size: 13px; font-weight: 600; }
+.permit-lbl span   { display: block; font-size: 11px; color: var(--gray-400); font-style: italic; }
+.permit-btns { display: flex; gap: 4px; flex-shrink: 0; }
+
+/* ── INCIDENT TABLE ───────────────────────────────────────── */
+.inc-table { width: 100%; border-collapse: collapse; }
+.inc-table th { background: var(--blue); color: var(--white); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; padding: 8px 12px; text-align: left; }
+.inc-table td { padding: 6px 8px; border-bottom: 1px solid var(--gray-100); vertical-align: top; }
+.inc-table td input { width: 100%; border: 1px solid var(--gray-200); border-radius: 4px; padding: 5px 8px; font-family: var(--font); font-size: 12px; }
+.inc-table td input:focus { outline: none; border-color: var(--blue-mid); box-shadow: 0 0 0 2px rgba(24,95,165,.1); }
+.inc-table tr:nth-child(even) td { background: var(--gray-50); }
+
+/* ── SCORING SECTION ──────────────────────────────────────── */
+.score-section-head {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--blue);
+  padding: 8px 12px;
+  background: var(--blue-xlight);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 18px 0 10px;
+}
+.emp-toggle {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.emp-btn {
+  flex: 1;
+  padding: 14px 16px;
+  text-align: center;
+  font-family: var(--font); font-size: 14px; font-weight: 600;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius);
+  cursor: pointer;
+  background: var(--white);
+  color: var(--gray-600);
+  transition: all .18s;
+  line-height: 1.3;
+  position: relative;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+.emp-btn::before {
+  content: '';
+  display: block;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--gray-200);
+  margin: 0 auto 8px;
+  background: var(--gray-100);
+  transition: all .18s;
+}
+.emp-btn:hover {
+  border-color: var(--blue-mid);
+  background: var(--blue-xlight);
+  color: var(--blue-dark);
+  box-shadow: 0 2px 8px rgba(24,95,165,.15);
+  transform: translateY(-1px);
+}
+.emp-btn:hover::before {
+  border-color: var(--blue-mid);
+  background: var(--blue-light);
+}
+.emp-btn .sub {
+  font-size: 11px; font-weight: 400;
+  color: var(--gray-400); margin-top: 4px;
+  transition: color .18s;
+}
+.emp-btn:hover .sub { color: var(--blue); }
+
+/* Active states */
+.emp-btn.active-sm {
+  background: var(--blue-light);
+  color: var(--blue-dark);
+  border-color: var(--blue-mid);
+  box-shadow: 0 2px 10px rgba(24,95,165,.20);
+  transform: translateY(0);
+}
+.emp-btn.active-sm::before {
+  background: var(--blue);
+  border-color: var(--blue);
+  content: '✓';
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.emp-btn.active-sm .sub { color: var(--blue); }
+.emp-btn.active-lg {
+  background: var(--red-light);
+  color: var(--red);
+  border-color: #E57373;
+  box-shadow: 0 2px 10px rgba(192,57,43,.15);
+  transform: translateY(0);
+}
+.emp-btn.active-lg::before {
+  background: var(--red);
+  border-color: var(--red);
+  content: '✓';
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.emp-btn.active-lg .sub { color: var(--red); }
+
+/* Unselected state: neutral grey cards that clearly need a selection */
+.emp-toggle:not(.emp-selected) .emp-btn {
+  border-color: var(--gray-400);
+  border-style: solid;
+  color: var(--gray-800);
+  background: var(--gray-100);
+}
+.emp-toggle:not(.emp-selected) .emp-btn::before {
+  border-color: var(--gray-400);
+  background: var(--white);
+}
+.emp-toggle:not(.emp-selected) .emp-btn .sub {
+  color: var(--gray-600);
+}
+
+.pair-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+@media(max-width:620px) { .pair-grid { grid-template-columns: 1fr; } }
+.pair-card {
+  border: 1px solid var(--gray-200); border-radius: var(--radius);
+  padding: 14px; background: var(--gray-50);
+  transition: border-color .15s, background .15s;
+}
+.pair-card.active { background: var(--white); border-color: var(--blue-mid); box-shadow: 0 0 0 3px rgba(24,95,165,.07); }
+.pair-card.active-red.active { border-color: #E57373; box-shadow: 0 0 0 3px rgba(192,57,43,.07); }
+.pair-card-head { font-size: 12px; font-weight: 600; color: var(--gray-600); display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.chip { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+.chip-sm  { background: var(--blue-light); color: var(--blue-dark); }
+.chip-lg  { background: var(--red-light); color: var(--red); }
+.chip-na  { background: var(--gray-100); color: var(--gray-400); border: 1px solid var(--gray-200); }
+.opt-hint { font-size: 11px; color: var(--gray-400); font-style: italic; margin-top: 3px; min-height: 14px; line-height: 1.4; }
+
+.score-trio { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+@media(max-width:640px) { .score-trio { grid-template-columns: 1fr; } }
+
+/* ── REF TABLES ───────────────────────────────────────────── */
+.ref-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.ref-wrap-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+@media(max-width:640px) { .ref-wrap,.ref-wrap-3 { grid-template-columns: 1fr; } }
+.ref-table { width: 100%; border-collapse: collapse; font-size: 12px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--gray-200); }
+.ref-table thead th { background: var(--blue); color: var(--white); padding: 6px 10px; text-align: left; font-weight: 600; font-size: 11px; letter-spacing: .04em; }
+.ref-table td { padding: 5px 8px; border-bottom: 1px solid var(--gray-100); }
+.ref-table td:first-child { font-weight: 700; text-align: center; width: 32px; }
+.ref-table tr:last-child td { border-bottom: none; }
+.bg-g1 { background: #EAF3DE; } .bg-g2 { background: #FEF4DC; }
+.bg-g3 { background: #FCEBEB; } .bg-g4 { background: #FADADD; }
+.bg-g5 { background: #F5B7B1; } .bg-na { background: var(--gray-50); }
+
+/* ── INTERACTIVE REF TABLES ───────────────────────────────── */
+.ref-interactive tbody tr.ref-row { cursor: pointer; transition: outline .1s; position: relative; }
+.ref-interactive tbody tr.ref-row:hover td { filter: brightness(0.93); }
+.ref-interactive tbody tr.ref-row.ref-selected td {
+  outline: 2px solid var(--blue);
+  outline-offset: -2px;
+  font-weight: 700;
+}
+.ref-interactive tbody tr.ref-row.ref-selected td:first-child::after {
+  content: ' ✓';
+  color: var(--blue);
+}
+.ref-table.ref-locked { display: none; }
+.pair-card.band-hidden { display: none; }
+
+/* ── RPI RESULT BOX ───────────────────────────────────────── */
+.rpi-box {
+  display: flex; gap: 20px; align-items: center;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  margin-top: 14px;
+}
+.rpi-num-wrap { text-align: center; min-width: 80px; }
+.rpi-big { font-size: 40px; font-weight: 700; line-height: 1; font-family: var(--mono); color: var(--blue); }
+.rpi-label { font-size: 11px; color: var(--gray-400); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin-top: 3px; }
+.rpi-pill { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 6px; }
+.pill-h  { background: var(--red-light); color: var(--red); }
+.pill-m  { background: var(--amber-light); color: var(--amber); }
+.pill-l  { background: var(--green-light); color: var(--green); }
+.pill-n  { background: var(--gray-100); color: var(--gray-400); }
+.rpi-formula { font-size: 12px; color: var(--gray-600); line-height: 2.0; flex: 1; }
+.rpi-formula strong { color: var(--gray-800); }
+
+/* ── SCORE ENTRY GRID ─────────────────────────────────────── */
+.score-entry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+@media(max-width:640px) { .score-entry-grid { grid-template-columns: repeat(3,1fr); } }
+.score-entry-cell label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--gray-600); display: block; margin-bottom: 3px; }
+.score-entry-cell .score-sub { font-size: 10px; color: var(--gray-400); margin-bottom: 4px; }
+.score-display {
+  background: var(--white); border: 2px solid var(--blue-mid);
+  border-radius: var(--radius); padding: 10px;
+  text-align: center; font-family: var(--mono);
+  font-size: 20px; font-weight: 700; color: var(--blue);
+  min-height: 46px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+.score-display.na { border-color: var(--gray-200); color: var(--gray-400); font-size: 13px; font-weight: 400; font-family: var(--font); }
+
+/* ── NOTES ────────────────────────────────────────────────── */
+.notes-area textarea { min-height: 90px; }
+
+/* ── SIGNATURE ROW ────────────────────────────────────────── */
+.sig-grid { display: grid; grid-template-columns: 1fr 1fr 200px; gap: 14px; margin-top: 18px; }
+@media(max-width:640px) { .sig-grid { grid-template-columns: 1fr; } }
+.sig-field label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--gray-600); display: block; margin-bottom: 4px; }
+.sig-line { border: none; border-bottom: 2px solid var(--gray-200); padding: 20px 0 4px; width: 100%; display: block; }
+
+/* ── ACTION BAR ───────────────────────────────────────────── */
+.action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--gray-50);
+  border-top: 1px solid var(--gray-200);
+}
+.btn-print {
+  background: var(--white);
+  color: var(--gray-800);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 9px 20px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: background .15s, border-color .15s;
+}
+.btn-print:hover { background: var(--gray-100); border-color: var(--gray-400); }
+.btn-submit {
+  background: var(--blue);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius);
+  padding: 10px 28px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: .01em;
+  transition: background .15s, box-shadow .15s;
+  box-shadow: 0 2px 6px rgba(24,95,165,.30);
+}
+.btn-submit:hover { background: var(--blue-dark); box-shadow: 0 3px 10px rgba(13,61,110,.35); }
+.btn-submit:disabled { opacity: .6; cursor: not-allowed; box-shadow: none; }
+.btn-clear {
+  background: var(--white);
+  color: var(--red);
+  border: 1px solid #F0AAAA;
+  border-radius: var(--radius);
+  padding: 9px 18px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: background .15s, border-color .15s;
+}
+.btn-clear:hover { background: var(--red-light); border-color: var(--red); }
+
+/* ── SUCCESS OVERLAY ──────────────────────────────────────── */
+.success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(13,61,110,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s;
+}
+.success-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.success-card {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 40px 48px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  max-width: 380px;
+  width: 90%;
+  transform: scale(.92);
+  transition: transform .25s;
+}
+.success-overlay.show .success-card { transform: scale(1); }
+.success-icon {
+  width: 56px; height: 56px;
+  background: var(--green-light);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.success-icon svg { stroke: var(--green); }
+.success-card h2 { font-size: 18px; font-weight: 700; color: var(--gray-800); margin-bottom: 6px; }
+.success-card p  { font-size: 13px; color: var(--gray-600); margin-bottom: 20px; line-height: 1.5; }
+.success-bar {
+  height: 4px;
+  background: var(--gray-100);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.success-bar-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 2px;
+  width: 100%;
+  transform-origin: left;
+  transition: transform linear;
+}
+
+/* ── ERROR BANNER ─────────────────────────────────────────── */
+.error-banner {
+  display: none;
+  background: #FFF4F4;
+  border: 1px solid #F0AAAA;
+  border-left: 4px solid var(--red);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin: 0 24px 0;
+}
+.error-banner.show { display: block; }
+.error-banner-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.error-banner-icon {
+  flex-shrink: 0;
+  width: 20px; height: 20px;
+  background: var(--red-light);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.error-banner-icon svg { stroke: var(--red); }
+.error-banner-text strong { font-size: 13px; font-weight: 700; color: var(--red); display: block; margin-bottom: 2px; }
+.error-banner-text span   { font-size: 12px; color: var(--gray-600); }
+.error-banner-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-retry {
+  background: var(--red); color: var(--white);
+  border: none; border-radius: var(--radius);
+  padding: 7px 16px; font-family: var(--font); font-size: 12px; font-weight: 600;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+  transition: background .15s;
+}
+.btn-retry:hover { background: #a93226; }
+.btn-err-print {
+  background: var(--white); color: var(--gray-800);
+  border: 1px solid var(--gray-200); border-radius: var(--radius);
+  padding: 7px 16px; font-family: var(--font); font-size: 12px; font-weight: 500;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+  transition: background .15s;
+}
+.btn-err-print:hover { background: var(--gray-100); }
+.btn-err-dismiss {
+  background: none; border: none; color: var(--gray-400);
+  font-family: var(--font); font-size: 12px; cursor: pointer;
+  padding: 7px 8px; margin-left: auto;
+}
+.btn-err-dismiss:hover { color: var(--gray-800); }
+
+/* ── SESSION PANEL ────────────────────────────────────────── */
+.session-panel {
+  background: var(--blue-xlight);
+  border-top: 1px solid var(--blue-light);
+  padding: 12px 24px;
+}
+.session-head {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 13px; color: var(--gray-800);
+}
+.session-head strong { color: var(--blue); font-size: 15px; }
+.session-toggle {
+  background: var(--white); color: var(--blue);
+  border: 1px solid var(--blue-mid); border-radius: var(--radius);
+  padding: 5px 14px; font-family: var(--font); font-size: 12px; font-weight: 600;
+  cursor: pointer;
+}
+.session-toggle:hover { background: var(--blue-light); }
+.session-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+.session-item {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--white); border: 1px solid var(--gray-200);
+  border-radius: var(--radius); padding: 8px 12px; font-size: 13px;
+}
+.session-item .si-task { flex: 1; font-weight: 500; }
+.session-item .si-open { cursor: pointer; color: var(--blue, #185FA5); text-decoration: underline; text-decoration-color: rgba(24,95,165,.35); }
+.session-item .si-open:hover { text-decoration-color: var(--blue, #185FA5); }
+.si-edit {
+  background: #fff; border: 1px solid var(--gray-200, #E4E8EC); color: var(--blue, #185FA5);
+  cursor: pointer; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 6px; line-height: 1;
+}
+.si-edit:hover { background: var(--blue, #185FA5); color: #fff; border-color: var(--blue, #185FA5); }
+.session-item .si-meta { color: var(--gray-400); font-size: 11px; }
+.session-item .si-rpi {
+  font-family: var(--mono); font-weight: 700; padding: 2px 10px;
+  border-radius: 20px; font-size: 12px;
+}
+.si-rpi.h { background: var(--red-light); color: var(--red); }
+.si-rpi.m { background: var(--amber-light); color: var(--amber); }
+.si-rpi.l { background: var(--green-light); color: var(--green); }
+.si-del {
+  background: none; border: none; color: var(--gray-400); cursor: pointer;
+  font-size: 16px; padding: 0 4px; line-height: 1;
+}
+.si-del:hover { color: var(--red); }
+.validation-warn {
+  background: var(--amber-light); border: 1px solid #E8C57A;
+  border-radius: var(--radius); padding: 10px 14px; margin-bottom: 12px;
+  font-size: 12px; color: #7A5A12; display: none;
+}
+.validation-warn.show { display: block; }
+.validation-warn ul { margin: 4px 0 0 18px; }
+
+/* ── FIELD ERROR HIGHLIGHT ────────────────────────────────── */
+.field-error > input,
+.field-error > select,
+.field-error > textarea {
+  border-color: var(--red) !important;
+  background: #FFF8F8 !important;
+  box-shadow: 0 0 0 3px rgba(192,57,43,.10) !important;
+}
+.field-error > label {
+  color: var(--red) !important;
+}
+/* emp-toggle error state */
+.emp-toggle-error .emp-btn:not(.active-sm):not(.active-lg) {
+  border-color: var(--red) !important;
+  border-style: dashed !important;
+  background: #FFF8F8 !important;
+  color: var(--red) !important;
+}
+.emp-toggle-error .emp-btn:not(.active-sm):not(.active-lg)::before {
+  border-color: var(--red) !important;
+  background: var(--red-light) !important;
+}
+.emp-toggle-error::after {
+  content: 'Select employee band';
+  display: block;
+  font-size: 11px;
+  color: var(--red);
+  font-style: italic;
+  margin-top: 5px;
+}
+/* scoring table error pulse border */
+.ref-table-error {
+  outline: 2px solid var(--red) !important;
+  outline-offset: 1px;
+}
+.ref-table-error thead th {
+  background: var(--red) !important;
+}
+
+
+/* ── OPTIONAL REVISION SECTION ─────────────────────────────── */
+.section-head.section-muted {
+  background: var(--gray-600);
+  color: var(--white);
+  padding: 8px 24px;
+}
+.section-head.section-muted .num {
+  background: rgba(255,255,255,.18);
+}
+.section-head.section-muted .revision-click {
+  margin-left: auto;
+  margin-right: 12px;
+  background: var(--white);
+  color: var(--gray-600);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: none;
+}
+.section-body.section-muted-body {
+  background: var(--gray-50);
+  border-top: 1px solid var(--gray-200);
+  border-bottom: 1px solid var(--gray-200);
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+.section-body.section-muted-body .field input,
+.section-body.section-muted-body .field select,
+.section-body.section-muted-body .field textarea {
+  background: var(--white);
+}
+
+/* ── PRINT STYLES ─────────────────────────────────────────── */
+@keyframes spin { to { transform: rotate(360deg); } }
+@media print {
+  .session-panel { display: none !important; }
+  body { background: white; font-size: 11px; }
+  .page-shell { max-width: 100%; padding: 0; }
+  .top-bar { border-radius: 0; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .form-card { box-shadow: none; border: none; }
+  .form-header { print-color-adjust: exact; -webkit-print-color-adjust: exact; padding: 16px 24px 14px; }
+  .form-header h1 { font-size: 18px; }
+  .score-bar { display: none; }
+  .section-head { position: static; print-color-adjust: exact; -webkit-print-color-adjust: exact; padding: 8px 18px; font-size: 10px; }
+  .section-head .chevron { display: none; }
+  .section-body { display: block !important; padding: 14px 18px; }
+  .action-bar { display: none; }
+  .yn-expand { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .rpi-box { break-inside: avoid; }
+  .ref-table thead th { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .bg-g1,.bg-g2,.bg-g3,.bg-g4,.bg-g5,.bg-na { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .inc-table th { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .pair-card { break-inside: avoid; border: 1px solid #ccc; }
+  .yn-btn { display: none; }
+  .haz-group-title { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .score-section-head { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .top-bar { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="page-shell">
+
+  <div class="top-bar">
+    <span class="brand">Columbus McKinnon &mdash; EHS</span>
+    <span class="meta">Risk Assessment &nbsp;|&nbsp; Rev 1.0</span>
+  </div>
+
+  <div class="form-card">
+
+    <!-- HEADER -->
+    <div class="form-header">
+      <h1>Risk Assessment Form</h1>
+      <div class="sub">EHS Workstation Risk Assessment</div>
+      <div class="header-meta-grid">
+        <div class="header-field"><label>Assessor Name</label><input type="text" id="h-assessor" placeholder="Your name" readonly tabindex="-1"></div>
+        <div class="header-field"><label>Site / Building / Department</label><input type="text" id="h-dept" placeholder="e.g. Hartland / Sussex / Fabrication" readonly tabindex="-1"></div>
+        <div class="header-field"><label>Date</label><input type="date" id="h-date" readonly tabindex="-1"></div>
+      </div>
+    </div>
+
+    <!-- LIVE SCORE BAR -->
+    <div class="score-bar">
+      <div class="score-tile"><div class="val haz" id="sb-haz">0</div><div class="key">Hazards</div></div>
+      <div class="score-tile"><div class="val" id="sb-rpi" style="color:var(--gray-400)">—</div><div class="key">RPI Score</div></div>
+      <div class="score-tile"><div class="val" id="sb-prob" style="color:var(--gray-400)">—</div><div class="key">Probability</div></div>
+      <div class="score-tile"><div class="val" id="sb-sev" style="color:var(--gray-400)">—</div><div class="key">Severity</div></div>
+    </div>
+
+    <!-- ═══ SECTION 1: GENERAL INFO ═══ -->
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="num">1</span> General Information
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+
+      <div id="dup-info-bar" style="display:none;margin-bottom:14px">
+        <button type="button" class="btn-dup" onclick="duplicateGeneralInfo()">
+          &#10697; Copy general info from last saved task
+        </button>
+        <span style="font-size:11px;color:var(--gray-400);font-style:italic;margin-left:8px">Pulls site, building, department, area, equipment, frequency, SOP &amp; PPE forward. Hazards and scores stay blank.</span>
+      </div>
+
+      <div class="field-grid col-3">
+        <div class="field">
+          <label>Assessor Name<span class="req">*</span></label>
+          <span class="hint">Person completing this assessment</span>
+          <input type="text" id="g-assessor" placeholder="Your name" oninput="syncHeader()">
+        </div>
+        <div class="field">
+          <label>Employee / Operator Name</label>
+          <span class="hint">Worker observed performing the task</span>
+          <input type="text" id="g-emp" placeholder="Evaluated with">
+        </div>
+        <div class="field">
+          <label>Date</label>
+          <span class="hint">Date of observation</span>
+          <input type="date" id="g-date" oninput="syncHeader()">
+        </div>
+      </div>
+
+      <div class="field-grid col-3">
+        <div class="field">
+          <label>Site<span class="req">*</span></label>
+          <span class="hint">Which facility this assessment is for</span>
+          <select id="g-site" onchange="toggleOther('g-site','g-site-other');updateBuildingOptions();syncHeader()">
+            <option value="">— Select —</option>
+            <option>Arlington, TX</option>
+            <option>Attalla, AL</option>
+            <option>Brighton, MI</option>
+            <option>Chattanooga, TN</option>
+            <option>Clackamas, OR</option>
+            <option>Corona, CA</option>
+            <option>Elizabethtown, PA</option>
+            <option>Hartland, WI</option>
+            <option>LaVergne, TN</option>
+            <option>Little Rock, AR</option>
+            <option>Longview, TX</option>
+            <option>Manheim, PA</option>
+            <option>Menomonee Falls, WI</option>
+            <option>Mt. Pleasant, PA</option>
+            <option>Necedah, WI</option>
+            <option>South Holland, IL</option>
+            <option>Tulsa, OK</option>
+            <option>Wadesboro, NC</option>
+            <option>Watertown, SD</option>
+            <option>Winona, MN</option>
+            <option>York, PA</option>
+            <option>Other</option>
+          </select>
+          <input type="text" id="g-site-other" placeholder="Specify site…" style="display:none;margin-top:6px" oninput="syncHeader()">
+        </div>
+        <div class="field">
+          <label>Building</label>
+          <span class="hint">Physical building where task occurs</span>
+          <input type="text" id="g-bldg" placeholder="e.g. Main Building, Plant 2" oninput="syncBuildingSelect();syncHeader()">
+          <select id="g-bldg-select" style="display:none" onchange="setBuildingFromSelect()">
+            <option value="">— Select —</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Department<span class="req">*</span></label>
+          <span class="hint">Department or work cell</span>
+          <input type="text" id="g-dept" placeholder="e.g. Fabrication, Welding" oninput="syncHeader()">
+        </div>
+      </div>
+
+      <div class="field-grid col-3">
+        <div class="field">
+          <label>Specific Area / Station</label>
+          <span class="hint">Workstation, line, or zone within the department</span>
+          <input type="text" id="g-area" placeholder="e.g. Line 3, Press #4">
+        </div>
+        <div class="field">
+          <label>Job / Task Description<span class="req">*</span></label>
+          <span class="hint">Specific enough that someone else could locate this task</span>
+          <input type="text" id="g-job" placeholder="e.g. Manual pallet stacking">
+        </div>
+        <div class="field">
+          <label>Equipment Involved</label>
+          <span class="hint">Tools, machines, vehicles, or materials</span>
+          <input type="text" id="g-equip" placeholder="e.g. Pallet jack, press">
+        </div>
+      </div>
+
+      <div class="field-grid col-3">
+        <div class="field">
+          <label>Task Frequency</label>
+          <span class="hint">How often per shift or day</span>
+          <select id="g-freq">
+            <option value="">— Select —</option>
+            <option>Continuously</option><option>Every minute</option>
+            <option>Every 5–10 minutes</option><option>Every 30 minutes</option>
+            <option>Every hour</option><option>Every day</option><option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Task Duration</label>
+          <span class="hint">Total time per shift</span>
+          <input type="text" id="g-dur" placeholder="e.g. 2 hr / shift">
+        </div>
+        <div class="field-grid col-2" style="margin-bottom:0">
+          <div class="field">
+            <label>Routine Task?</label>
+            <span class="hint">Regularly scheduled part of job</span>
+            <div class="yn-btns" style="margin-top:4px">
+              <button type="button" class="yn-btn" id="g-routine-y" onclick="togGen('g-routine','y')">Yes</button>
+              <button type="button" class="yn-btn" id="g-routine-n" onclick="togGen('g-routine','n')">No</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Down Days?</label>
+            <span class="hint">Days when this task is NOT performed</span>
+            <div class="yn-btns" style="margin-top:4px">
+              <button type="button" class="yn-btn" id="g-down-y" onclick="togGen('g-down','y')">Yes</button>
+              <button type="button" class="yn-btn" id="g-down-n" onclick="togGen('g-down','n')">No</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-grid col-3">
+        <div class="field-grid col-2" style="margin-bottom:0">
+          <div class="field">
+            <label>SOP / WI Exists?</label>
+            <span class="hint">Is there a written procedure for this task?</span>
+            <div class="yn-btns" style="margin-top:4px">
+              <button type="button" class="yn-btn" id="g-sop-y" onclick="togGen('g-sop','y')">Yes</button>
+              <button type="button" class="yn-btn" id="g-sop-n" onclick="togGen('g-sop','n')">No</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>SOP / WI Number</label>
+            <span class="hint">Document number if known</span>
+            <input type="text" id="g-sopnum" placeholder="Doc #">
+          </div>
+        </div>
+        <div class="field" style="grid-column: span 2">
+          <label>PPE Requirements</label>
+          <span class="hint">Standard PPE is required by default; add any task-specific items</span>
+          <label class="ppe-check"><input type="checkbox" id="g-ppe-std" checked> Standard PPE <span style="color:var(--gray-400);font-weight:400">(safety glasses, safety shoes, gloves)</span></label>
+          <input type="text" id="g-ppe" placeholder="Additional PPE — e.g. face shield, hearing protection, respirator" style="margin-top:6px">
+        </div>
+      </div>
+
+      <div class="field-grid col-1">
+        <div class="field">
+          <label>Safe Work Considerations</label>
+          <span class="hint">Lighting, housekeeping, ventilation, space constraints, temperature, noise, etc.</span>
+          <textarea id="g-swc" placeholder="e.g. Poor lighting near press #4, floor wet near drain, limited forklift turnaround space"></textarea>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;margin-bottom:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--blue);border-bottom:1px solid var(--blue-light);padding-bottom:5px;">Special Requirements &amp; Permits</div>
+      <div style="font-size:11px;color:var(--gray-400);font-style:italic;margin-bottom:10px;">Flag any programs or permits that apply. These require separate documentation beyond this blitz form.</div>
+      <div id="permits-area"></div>
+
+    </div>
+
+    <!-- ═══ SECTION 2: HAZARD ID ═══ -->
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="num">2</span> Hazard Identification
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div style="font-size:12px;color:var(--gray-600);font-style:italic;margin-bottom:12px;">Toggle <strong>Yes</strong> for any hazard present — comments and control fields expand automatically. Leave <strong>No</strong> for hazards that do not apply.</div>
+      <div id="hazards-area"></div>
+    </div>
+
+    <!-- ═══ SECTION 3: INCIDENT HISTORY ═══ -->
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="num">3</span> Incident History — Last 3 Years
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div style="font-size:12px;color:var(--gray-600);font-style:italic;margin-bottom:12px;">Check the OSHA 300 log before completing the Probability score below. Record up to three incidents — prioritize the most severe. This directly drives the Probability factor.</div>
+      <table class="inc-table">
+        <thead><tr><th style="width:80px">#</th><th style="width:160px">Date</th><th>OSHA Classification, Body Part &amp; Description</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600;color:var(--blue)">Inc. 1</td><td><input type="date" id="inc-d-1"></td><td><input type="text" id="inc-t-1" placeholder="e.g. Recordable — laceration to right hand, caught on metal burr during assembly"></td></tr>
+          <tr><td style="font-weight:600;color:var(--blue)">Inc. 2</td><td><input type="date" id="inc-d-2"></td><td><input type="text" id="inc-t-2" placeholder="e.g. First aid — bruised shin, struck by falling part on assembly line"></td></tr>
+          <tr><td style="font-weight:600;color:var(--blue)">Inc. 3</td><td><input type="date" id="inc-d-3"></td><td><input type="text" id="inc-t-3" placeholder="e.g. Near miss — no injury, pinch point near press #4 guard gap noted"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ═══ SECTION 4: RISK SCORING ═══ -->
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="num">4</span> Risk Scoring
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+
+      <div style="font-size:12px;color:var(--gray-600);margin-bottom:14px;">
+        <strong>Formula:</strong> (Exp&#8321; + Dur&#8321; + Exp&#8322; + Dur&#8322;) &times; Probability &times; Severity &times; Control<br>
+        <span style="font-style:italic;color:var(--gray-400)">Select the employee band first. The inactive band defaults to 1/1 (N/A) and still contributes minimally to the sum — this is by design.</span>
+      </div>
+
+      <div class="score-section-head">Step 1 — How many employees perform this task?<span class="req">*</span></div>
+      <div class="emp-toggle">
+        <button class="emp-btn" id="etb-sm" onclick="setEmp('sm')">
+          1–3 Employees
+          <div class="sub">Exposure 1–3 &nbsp;&middot;&nbsp; Duration 1–4</div>
+        </button>
+        <button class="emp-btn" id="etb-lg" onclick="setEmp('lg')">
+          4 or More Employees
+          <div class="sub">Exposure 1–4 &nbsp;&middot;&nbsp; Duration 1–5</div>
+        </button>
+      </div>
+
+      <div class="score-section-head">Step 2 — Exposure &amp; Duration <span style="font-weight:400;font-size:10px;opacity:.7;text-transform:none;letter-spacing:0">&#8212; Click a row to select. Only the active band is shown.</span></div>
+
+      <!-- Hidden selects kept for calc() compatibility -->
+      <div style="display:none">
+        <select id="exp1" onchange="calc()"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>
+        <select id="dur1" onchange="calc()"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select>
+        <select id="exp2" onchange="calc()"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select>
+        <select id="dur2" onchange="calc()"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select>
+        <div id="exp1-desc"></div><div id="dur1-desc"></div>
+        <div id="exp2-desc"></div><div id="dur2-desc"></div>
+      </div>
+
+      <div class="ref-wrap" id="step3-wrap">
+        <!-- 1-3 band tables -->
+        <table class="ref-table ref-interactive ref-table-sm" id="step3-exp1">
+          <thead><tr><th colspan="2">Exposure — 1–3 Employee Band (Exp&#8321;)</th></tr></thead>
+          <tbody>
+            <tr class="bg-g1 ref-row" onclick="pickRef('exp1',1,this)"><td>1</td><td>Periodically — rarely comes up, infrequent and unpredictable</td></tr>
+            <tr class="bg-g2 ref-row" onclick="pickRef('exp1',2,this)"><td>2</td><td>Occasionally — regular but not constant, perhaps weekly</td></tr>
+            <tr class="bg-g3 ref-row" onclick="pickRef('exp1',3,this)"><td>3</td><td>Frequently — daily or multiple times per shift</td></tr>
+          </tbody>
+        </table>
+        <table class="ref-table ref-interactive ref-table-sm" id="step3-dur1">
+          <thead><tr><th colspan="2">Duration — 1–3 Employee Band (Dur&#8321;)</th></tr></thead>
+          <tbody>
+            <tr class="bg-g1 ref-row" onclick="pickRef('dur1',1,this)"><td>1</td><td>Less than 5 minutes</td></tr>
+            <tr class="bg-g1 ref-row" onclick="pickRef('dur1',2,this)"><td>2</td><td>5 to 10 minutes</td></tr>
+            <tr class="bg-g2 ref-row" onclick="pickRef('dur1',3,this)"><td>3</td><td>More than 10 minutes, not continuous</td></tr>
+            <tr class="bg-g3 ref-row" onclick="pickRef('dur1',4,this)"><td>4</td><td>Continuous throughout the shift</td></tr>
+          </tbody>
+        </table>
+        <!-- 4+ band tables -->
+        <table class="ref-table ref-interactive ref-table-lg" id="step3-exp2">
+          <thead><tr><th colspan="2">Exposure — 4+ Employee Band (Exp&#8322;)</th></tr></thead>
+          <tbody>
+            <tr class="bg-g1 ref-row" onclick="pickRef('exp2',2,this)"><td>2</td><td>Periodically — rarely comes up, infrequent and unpredictable</td></tr>
+            <tr class="bg-g2 ref-row" onclick="pickRef('exp2',3,this)"><td>3</td><td>Occasionally — regular but not constant</td></tr>
+            <tr class="bg-g3 ref-row" onclick="pickRef('exp2',4,this)"><td>4</td><td>Frequently — daily or multiple times per shift</td></tr>
+          </tbody>
+        </table>
+        <table class="ref-table ref-interactive ref-table-lg" id="step3-dur2">
+          <thead><tr><th colspan="2">Duration — 4+ Employee Band (Dur&#8322;)</th></tr></thead>
+          <tbody>
+            <tr class="bg-g1 ref-row" onclick="pickRef('dur2',2,this)"><td>2</td><td>Less than 5 minutes</td></tr>
+            <tr class="bg-g1 ref-row" onclick="pickRef('dur2',3,this)"><td>3</td><td>5 to 10 minutes</td></tr>
+            <tr class="bg-g2 ref-row" onclick="pickRef('dur2',4,this)"><td>4</td><td>More than 10 minutes, not continuous</td></tr>
+            <tr class="bg-g3 ref-row" onclick="pickRef('dur2',5,this)"><td>5</td><td>Continuous throughout the shift</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Selected score display -->
+      <div id="band-summary" style="display:none;gap:10px;margin-bottom:6px" class="ref-wrap">
+        <div style="background:var(--blue-xlight);border:1px solid var(--blue-mid);border-radius:var(--radius);padding:8px 12px;font-size:12px">
+          <span style="font-weight:600;color:var(--blue)">Exp&#8321;</span> <span id="bs-exp1" style="color:var(--gray-600)">—</span>
+          &nbsp;&nbsp;
+          <span style="font-weight:600;color:var(--blue)">Dur&#8321;</span> <span id="bs-dur1" style="color:var(--gray-600)">—</span>
+        </div>
+        <div style="background:#FEF0F0;border:1px solid #F0AAAA;border-radius:var(--radius);padding:8px 12px;font-size:12px">
+          <span style="font-weight:600;color:var(--red)">Exp&#8322;</span> <span id="bs-exp2" style="color:var(--gray-600)">—</span>
+          &nbsp;&nbsp;
+          <span style="font-weight:600;color:var(--red)">Dur&#8322;</span> <span id="bs-dur2" style="color:var(--gray-600)">—</span>
+        </div>
+      </div>
+
+      <!-- Step 3 locked placeholder — shown until band is selected -->
+      <div id="step4-placeholder" style="background:var(--gray-50);border:1px dashed var(--gray-200);border-radius:var(--radius);padding:16px 20px;text-align:center;color:var(--gray-400);font-size:12px;font-style:italic;margin-bottom:4px">
+        &#8593; Select the employee band above to unlock Probability, Severity &amp; Control scoring
+      </div>
+
+      <!-- Steps 3 + 4 + RPI — hidden until band is chosen -->
+      <div id="step4-wrap" style="display:none">
+
+      <div class="score-section-head">Step 3 — Probability, Severity &amp; Control <span style="font-weight:400;font-size:10px;opacity:.7;text-transform:none;letter-spacing:0">&#8212; Click a row to select</span></div>
+      <div class="ref-wrap-3" style="margin-top:10px">
+        <table class="ref-table ref-interactive" id="reft-prob">
+          <thead><tr><th colspan="2">Probability<span class="req">*</span> — Review Past Incidents</th></tr></thead>
+          <tbody>
+            <tr class="bg-g1 ref-row" onclick="pickRef4('sc-prob','1',this)"><td>1</td><td>No incidents in last 3 years — task appears well-managed</td></tr>
+            <tr class="bg-g2 ref-row" onclick="pickRef4('sc-prob','2',this)"><td>2</td><td>One incident in last 3 years</td></tr>
+            <tr class="bg-g3 ref-row" onclick="pickRef4('sc-prob','3',this)"><td>3</td><td>One incident in last 2 years — more recent history raises risk</td></tr>
+            <tr class="bg-g4 ref-row" onclick="pickRef4('sc-prob','4',this)"><td>4</td><td>More than one incident in last 2 years — hazard is actively causing harm</td></tr>
+          </tbody>
+        </table>
+        <table class="ref-table ref-interactive" id="reft-sev">
+          <thead><tr><th colspan="2">Severity<span class="req">*</span> — Worst Credible Outcome</th></tr></thead>
+          <tbody>
+            <tr class="bg-g1 ref-row" onclick="pickRef4('sc-sev','1',this)"><td>1</td><td>First aid only — treatable on-site, no medical referral</td></tr>
+            <tr class="bg-g2 ref-row" onclick="pickRef4('sc-sev','2',this)"><td>2</td><td>Medical attention or lost time — clinic/ER or restricted duty</td></tr>
+            <tr class="bg-g3 ref-row" onclick="pickRef4('sc-sev','3',this)"><td>3</td><td>Long-term illness or serious injury — lasting consequences, surgery</td></tr>
+            <tr class="bg-g4 ref-row" onclick="pickRef4('sc-sev','4',this)"><td>4</td><td>Death or permanent disability — if the energy source is capable of it</td></tr>
+          </tbody>
+        </table>
+        <table class="ref-table ref-interactive" id="reft-ctrl">
+          <thead><tr><th colspan="2">Control<span class="req">*</span> — Hierarchy of Controls (0 = best)</th></tr></thead>
+          <tbody>
+            <tr class="bg-g1 ref-row" onclick="pickRef4('sc-ctrl','0',this)"><td>0</td><td>Elimination — hazard removed entirely (RPI = 0)</td></tr>
+            <tr class="bg-g1 ref-row" onclick="pickRef4('sc-ctrl','1',this)"><td>1</td><td>Substitution — safer alternative in place</td></tr>
+            <tr class="bg-g2 ref-row" onclick="pickRef4('sc-ctrl','2',this)"><td>2</td><td>Engineering controls — guards, ventilation, interlocks</td></tr>
+            <tr class="bg-g2 ref-row" onclick="pickRef4('sc-ctrl','3',this)"><td>3</td><td>Administrative controls — SOPs, signage, rotation</td></tr>
+            <tr class="bg-g3 ref-row" onclick="pickRef4('sc-ctrl','4',this)"><td>4</td><td>PPE — does not eliminate the hazard</td></tr>
+            <tr class="bg-g4 ref-row" onclick="pickRef4('sc-ctrl','5',this)"><td>5</td><td>Behavior only — no formal control. Action required.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Hidden selects kept for calc() compatibility -->
+      <div style="display:none">
+        <select id="sc-prob" onchange="calc()">
+          <option value=""></option>
+          <option value="1">1</option><option value="2">2</option>
+          <option value="3">3</option><option value="4">4</option>
+        </select>
+        <select id="sc-sev" onchange="calc()">
+          <option value=""></option>
+          <option value="1">1</option><option value="2">2</option>
+          <option value="3">3</option><option value="4">4</option>
+        </select>
+        <select id="sc-ctrl" onchange="calc()">
+          <option value=""></option>
+          <option value="0">0</option><option value="1">1</option><option value="2">2</option>
+          <option value="3">3</option><option value="4">4</option><option value="5">5</option>
+        </select>
+        <div id="prob-desc"></div>
+        <div id="sev-desc"></div>
+        <div id="ctrl-desc"></div>
+      </div>
+
+      <div class="score-section-head">Step 4 — Score Summary</div>
+      <div class="score-entry-grid" style="margin-top:10px" id="score-summary-grid">
+        <div class="score-entry-cell sd-band-sm" id="sd-cell-exp1"><label>Exp&#8321;</label><div class="score-sub">1–3 emp</div><div class="score-display na" id="sd-exp1">—</div></div>
+        <div class="score-entry-cell sd-band-sm" id="sd-cell-dur1"><label>Dur&#8321;</label><div class="score-sub">1–3 emp</div><div class="score-display na" id="sd-dur1">—</div></div>
+        <div class="score-entry-cell sd-band-lg" id="sd-cell-exp2"><label>Exp&#8322;</label><div class="score-sub">4+ emp</div><div class="score-display na" id="sd-exp2">—</div></div>
+        <div class="score-entry-cell sd-band-lg" id="sd-cell-dur2"><label>Dur&#8322;</label><div class="score-sub">4+ emp</div><div class="score-display na" id="sd-dur2">—</div></div>
+        <div class="score-entry-cell"><label>Prob.</label><div class="score-sub">incidents</div><div class="score-display na" id="sd-prob">—</div></div>
+        <div class="score-entry-cell"><label>Severity</label><div class="score-sub">outcome</div><div class="score-display na" id="sd-sev">—</div></div>
+        <div class="score-entry-cell"><label>Control</label><div class="score-sub">hierarchy</div><div class="score-display na" id="sd-ctrl">—</div></div>
+      </div>
+
+      <div class="rpi-box">
+        <div class="rpi-num-wrap">
+          <div class="rpi-big" id="rpi-num">—</div>
+          <div class="rpi-label">RPI Score</div>
+          <div><span class="rpi-pill pill-n" id="rpi-pill">Not scored</span></div>
+        </div>
+        <div class="rpi-formula" id="rpi-formula">Complete employee band and all scoring fields to calculate.</div>
+      </div>
+
+      </div><!-- /#step4-wrap -->
+
+    </div>
+
+    <!-- ═══ SECTION 5: NOTES ═══ -->
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="num">5</span> Assessor Notes &amp; Recommended Actions
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="field notes-area">
+        <label>Priority follow-up items, suggested controls, immediate hazards observed, who to notify</label>
+        <span class="hint">e.g. Guard on press #4 has visible gap — recommend engineering review. Operator noted discomfort after 2 hr — flag for ergo deep-dive.</span>
+        <textarea id="sc-notes" placeholder="Enter notes here…"></textarea>
+      </div>
+      <div class="sig-grid">
+        <div class="sig-field"><label>Assessor Signature</label><span class="sig-line"></span></div>
+        <div class="sig-field"><label>Supervisor / EHS Review</label><span class="sig-line"></span></div>
+        <div class="sig-field"><label>Date Reviewed</label><span class="sig-line"></span></div>
+      </div>
+    </div>
+
+    <!-- ═══ SECTION 6: REVISION & RE-ASSESSMENT ═══ -->
+    <div class="section-head section-muted collapsed" onclick="toggleSection(this)">
+      <span class="num">6</span> Revision &amp; Re-Assessment <span style="opacity:.7;font-weight:500;text-transform:none;letter-spacing:0">Optional</span>
+      <span class="revision-click">Click for revision change</span>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body section-muted-body hidden">
+      <p style="font-size:12.5px;color:var(--gray-600);margin:0 0 14px;line-height:1.5">
+        Filling this out for the first time? Leave the ID blank — it stays Revision 1. Re-assessing a task because conditions changed? Look up the original record's ID in the dashboard, enter it below, and the revision advances automatically. The original assessment is preserved as history.
+      </p>
+      <div class="field-grid col-2">
+        <div class="field">
+          <label>Re-assessing an existing task?</label>
+          <span class="hint">Enter the original record's ID from the dashboard. Leave blank for a brand-new assessment.</span>
+          <input type="number" id="sc-parentid" min="1" placeholder="Original record ID (e.g. 47)" oninput="onParentIdChange()">
+        </div>
+        <div class="field">
+          <label>Revision Number</label>
+          <span class="hint" id="rev-hint">New assessments are Revision 1</span>
+          <select id="sc-rev" style="width:140px">
+            <option value="1">1 (original)</option>
+            <option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- VALIDATION WARNING -->
+    <div class="validation-warn" id="validation-warn" style="margin:0 24px 0"></div>
+
+    <!-- EDITING BANNER -->
+    <div id="editing-banner" style="display:none; align-items:center; justify-content:space-between; gap:12px; background:#FEF4DC; border:1px solid #E0B040; border-left:5px solid #E0B040; border-radius:8px; padding:10px 16px; margin-bottom:12px;">
+      <span style="font-size:14px; color:#1A202C;">Editing saved task: <strong id="editing-task-name"></strong> — make your changes, then Submit to update it.</span>
+      <button type="button" onclick="cancelEditing()" style="background:#fff; border:1px solid #E0B040; color:#8a6516; border-radius:6px; padding:6px 14px; font-size:13px; cursor:pointer; white-space:nowrap;">Cancel editing</button>
+    </div>
+
+    <!-- SAVED TASKS PANEL -->
+    <div class="session-panel" id="session-panel" style="display:none">
+      <div class="session-head">
+        <span><strong id="session-count">0</strong> task(s) saved this session</span>
+        <button class="session-toggle" id="session-toggle" onclick="toggleSessionList()">Show list</button>
+      </div>
+      <div class="session-list" id="session-list" style="display:none"></div>
+    </div>
+
+    <!-- ERROR BANNER -->
+    <div class="error-banner" id="error-banner">
+      <div class="error-banner-head">
+        <div class="error-banner-icon">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
+        <div class="error-banner-text">
+          <strong>Submission failed — your data is safe</strong>
+          <span id="error-banner-msg">Could not reach SharePoint. Check your connection and try again.</span>
+        </div>
+        <button class="btn-err-dismiss" onclick="dismissError()" title="Dismiss">&#10005;</button>
+      </div>
+      <div class="error-banner-actions">
+        <button class="btn-retry" onclick="retrySubmit()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Try again
+        </button>
+        <button class="btn-err-print" onclick="window.print()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print as backup
+        </button>
+      </div>
+    </div>
+
+    <!-- ACTION BAR -->
+    <div class="action-bar">
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="btn-print" onclick="window.print()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print / PDF
+        </button>
+        <button class="btn-clear" onclick="clearForm()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          Clear Form
+        </button>
+      </div>
+      <button class="btn-submit" id="btn-submit-sp" onclick="submitToSharePoint()">
+        Submit
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+
+  </div><!-- /.form-card -->
+</div><!-- /.page-shell -->
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-card">
+    <div class="success-icon">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2>Assessment submitted</h2>
+    <p>Successfully sent to SharePoint.<br>The form will clear in a moment for your next task.</p>
+    <div class="success-bar"><div class="success-bar-fill" id="success-bar-fill"></div></div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────
+const PERMITS = [
+  {id:'loto',   label:'LOTO Required?',                   sub:'Does the task require isolation of hazardous energy sources before work begins?'},
+  {id:'cs',     label:'Confined Space Permit?',           sub:'Does the task involve entry into a permit-required confined space?'},
+  {id:'ewp',    label:'Energized Work Permit?',           sub:'Is any work performed on or near exposed energized electrical equipment?'},
+  {id:'resp',   label:'Respiratory Protection Required?', sub:'Does the task require a respirator beyond nuisance dust — cartridge, PAPR, or supplied-air?'},
+  {id:'legal',  label:'Other Legal Requirements?',        sub:'Any OSHA standard, NFPA rule, or regulatory requirement that applies to this task?'},
+  {id:'permit', label:'Other Required Permits?',          sub:'Any additional CMCO permit — hot work, elevated work, or similar?'},
+];
+
+const HAZ_GROUPS = [
+  { group:'Eye and Face Hazards', items:[
+    {id:'fly-obj',   label:'Flying Objects',              sub:'Chips, sparks, debris, or projectiles that could contact the eyes or face'},
+    {id:'heat-eye',  label:'Heat',                        sub:'Radiant heat, molten material, or hot surfaces near the face'},
+    {id:'liquid',    label:'Liquids',                     sub:'Splashing fluids — coolant, oils, water, cleaning agents'},
+    {id:'chem-eye',  label:'Chemical Eye / Face Contact', sub:'Corrosives, solvents, or irritants that could contact the eyes or skin'},
+    {id:'glare',     label:'Light / Glare',               sub:'Welding arc flash, laser, UV/IR radiation, or excessive glare affecting vision'},
+    {id:'other-eye', label:'Other Eye or Face Hazard',    sub:'Any eye or face hazard not covered above'},
+  ]},
+  { group:'Respiratory Hazards', items:[
+    {id:'dust',       label:'Dust',                       sub:'Wood dust, metal dust, abrasive particles, or any airborne particulate'},
+    {id:'fumes',      label:'Fumes',                      sub:'Welding fumes, metal fumes, combustion products, or thermal degradation byproducts'},
+    {id:'gas',        label:'Gases',                      sub:'Compressed gases, combustion gases, or process gas releases'},
+    {id:'vapor',      label:'Vapors',                     sub:'Solvent vapors, fuel vapors, or vaporized liquids at room or elevated temperature'},
+    {id:'mist',       label:'Mists',                      sub:'Oil mist, coolant mist, or spray from cutting, grinding, or coating operations'},
+    {id:'toxic',      label:'Toxic Atmosphere',           sub:'Any atmosphere with airborne contaminants at levels hazardous to health'},
+    {id:'o2',         label:'Oxygen-Deficient Atmosphere',sub:'Any enclosed or low-ventilation space where O₂ may be depleted below 19.5%'},
+    {id:'co',         label:'Carbon Monoxide',            sub:'Internal combustion engines, forklifts, or combustion processes in enclosed areas'},
+    {id:'other-resp', label:'Other Respiratory Hazard',   sub:'Any respiratory hazard not covered above'},
+  ]},
+  { group:'Head Hazards', items:[
+    {id:'overhead',   label:'Overhead Work',              sub:'Working with arms raised above shoulder height, or directly under overhead operations'},
+    {id:'fall-mat',   label:'Falling Materials',          sub:'Objects stored or positioned above the work area that could fall'},
+    {id:'fly-mat',    label:'Flying Materials',           sub:'Material ejected from machines or processes above or around the worker'},
+    {id:'tool-head',  label:'Tool Usage at / Above Head', sub:'Operating tools at or above head height — increases strain and impact risk'},
+    {id:'mach-head',  label:'Machinery (Head)',           sub:'Moving machine parts, robotic arms, or overhead equipment near the worker\'s head'},
+    {id:'other-head', label:'Other Head Hazard',          sub:'Any head hazard not covered above'},
+  ]},
+  { group:'Hand Hazards', items:[
+    {id:'punct',      label:'Puncture',                   sub:'Sharp wire ends, fasteners, needles, drill bits, or any pointed object that could puncture skin'},
+    {id:'temp-burn',  label:'Temperature Burn',           sub:'Contact with hot surfaces, steam, or excessively cold materials'},
+    {id:'sparks',     label:'Sparks',                     sub:'Sparks from welding, grinding, or cutting operations landing on hands or arms'},
+    {id:'sharp',      label:'Sharp Objects / Edges',      sub:'Burrs, sheet metal edges, saw blades, or machined parts with unfinished edges'},
+    {id:'chem-hand',  label:'Chemical Hand Contact',      sub:'Solvents, cleaners, cutting fluids, adhesives, or other chemicals contacting skin'},
+    {id:'tools-hand', label:'Tools (Hand)',                sub:'Crush from impact wrenches, torque reaction, slip, or overexertion with hand tools'},
+    {id:'cold',       label:'Cold Weather / Cold Surfaces',sub:'Outdoor cold exposure or contact with refrigerated or frozen materials'},
+    {id:'other-hand', label:'Other Hand Hazard',          sub:'Any hand hazard not covered above'},
+  ]},
+  { group:'Environmental Hazards', items:[
+    {id:'spill',      label:'Spills',                     sub:'Risk of liquid release to floor, drain, or environment — oils, coolants, chemicals'},
+    {id:'air-emit',   label:'Air Emission',               sub:'Process air emissions subject to environmental permit or reporting'},
+    {id:'water-emit', label:'Water Emission',             sub:'Wastewater, process water discharge, or stormwater contamination risk'},
+    {id:'nonhaz',     label:'Non-Hazardous Waste',        sub:'Scrap, cardboard, general trash, or other non-regulated solid waste'},
+    {id:'haz-waste',  label:'Hazardous Waste',            sub:'Used solvents, contaminated rags, spent cutting fluids, or other regulated waste streams'},
+    {id:'oth-waste',  label:'Other Waste',                sub:'Universal waste (bulbs, batteries), e-waste, or other non-standard waste types'},
+    {id:'pcb',        label:'PCBs',                       sub:'Older electrical equipment, transformers, or fluorescent light ballasts made before 1979'},
+    {id:'asbestos',   label:'Asbestos',                   sub:'Older building materials, pipe insulation, floor tiles, or gaskets that may contain asbestos'},
+  ]},
+  { group:'Other Hazards', items:[
+    {id:'fall-ht',    label:'Fall from Height',           sub:'Any work above 4 feet — ladders, platforms, mezzanines, rooftops, or elevated equipment'},
+    {id:'slip',       label:'Fall / Slip / Trip — Same Level', sub:'Wet floors, uneven surfaces, cords across walkways, cluttered aisles'},
+    {id:'stored-e',   label:'Stored Energy / Gravity',    sub:'Suspended loads, compressed springs, pressurized systems, or unexpected energy release'},
+    {id:'elec',       label:'Electrical Hazards',         sub:'Exposed conductors, damaged cords, open panels, or work near energized equipment — see NFPA 70E'},
+    {id:'vehicle',    label:'Vehicle Interaction',        sub:'Forklifts, tuggers, overhead cranes, or other mobile equipment sharing the work area'},
+    {id:'alone',      label:'Working Alone',              sub:'Task performed in a remote or isolated area without immediate access to help if injured'},
+    {id:'repet',      label:'Repetitive Motions',         sub:'Repeated forceful gripping, pinching, reaching, or similar motions — risk of cumulative trauma'},
+    {id:'lift',       label:'Lifting / Material Handling',sub:'Manual lifting, lowering, pushing, pulling, or carrying — consider weight, posture, and frequency'},
+    {id:'pinch',      label:'Caught Between / Pinch Points', sub:'Any location where body parts could be caught between moving and stationary objects'},
+    {id:'struck',     label:'Struck By',                  sub:'Moving parts, swinging loads, ejected material, or vehicles that could contact the worker'},
+    {id:'vision',     label:'Obstructed Vision',          sub:'Blind corners, obscured sightlines, or vision limited by PPE or environment during the task'},
+    {id:'noise',      label:'Noise Level >85 dB',         sub:'Grinding, pressing, air tools, stamping — operations generating significant noise above the action level'},
+    {id:'lighting',   label:'Poor Lighting',              sub:'Insufficient illumination for safe task performance — shadows, glare, or inadequate fixtures'},
+    {id:'ergo',       label:'Poor Ergonomics',            sub:'Awkward postures, sustained static loading, excessive reach, or workstation not suited to the worker'},
+    {id:'other-all',  label:'Other Hazard Not Listed',    sub:'Any significant hazard not captured in the categories above'},
+  ]},
+];
+
+const EXP1_D = {1:'Rarely comes up — task is performed infrequently and unpredictably.',2:'Comes up regularly but not constantly — perhaps weekly or several times per shift.',3:'Happens very frequently — daily or multiple times per shift.'};
+const DUR1_D = {1:'Very brief — task is in and out in under 5 minutes with no prolonged exposure.',2:'Short but meaningful — 5 to 10 minutes per instance.',3:'Extended — over 10 minutes per instance, but the employee does get breaks.',4:'Employee is exposed for the majority of or the entire shift with no meaningful relief.'};
+const EXP2_D = {1:'N/A — fewer than 4 employees perform this task. Score the 1–3 band instead.',2:'The group performs this task infrequently.',3:'The group performs this task regularly but not constantly.',4:'The group performs this task very frequently — daily or throughout the shift.'};
+const DUR2_D = {1:'N/A — fewer than 4 employees. Score the 1–3 band instead.',2:'Very brief group exposure — under 5 minutes.',3:'Short group exposure — 5 to 10 minutes.',4:'Extended group exposure — over 10 minutes, not continuous.',5:'The group is exposed for the majority of or the entire shift.'};
+const PROB_D = {1:'No recorded incidents or near misses in the past three years. Task appears well-managed historically.',2:'One incident or near miss on record in the past three years — some risk exists.',3:'An incident occurred within the last two years — active risk, more recent history.',4:'Multiple incidents in the last two years — this hazard is actively causing harm. Priority action required.'};
+const SEV_D  = {1:'Minor cut, bruise, strain, or irritation — treatable on-site. No medical referral needed.',2:'Injury requires a clinic or ER visit, results in missed workdays, or places the worker on restricted duty.',3:'Injury has lasting consequences — chronic illness, permanent partial loss of function, or serious trauma.',4:'Catastrophic outcome — fatal injury or permanent total disability. Select if the energy source is capable of it.'};
+const CTRL_D = {0:'Hazard completely removed. Nothing left to control. RPI = 0.',1:'Safer alternative material, process, or equipment has replaced the hazardous one.',2:'Physical barrier or engineered system prevents exposure — guard, ventilation, interlock, two-hand control.',3:'Procedures, training, schedules, or warnings reduce exposure — SOP, job rotation, permit-to-work.',4:'Workers wear PPE to reduce harm if contact occurs. Note: PPE does not eliminate the hazard.',5:'No formal control exists. Workers rely entirely on awareness or experience. Action required.'};
+
+const hazState = {};
+const genState = { 'g-routine':'Yes', 'g-down':'No', 'g-sop':'No' };
+const GEN_DEFAULTS = { 'g-routine':'Yes', 'g-down':'No', 'g-sop':'No' };
+
+// Sites with multiple buildings use a controlled dropdown for the Building field.
+// All other sites keep the normal free-text Building field.
+const BUILDINGS_BY_SITE = {
+  'Chattanooga, TN': ['GW', 'EC'],
+  'Hartland, WI': ['Hartland', 'Sussex'],
+  'Menomonee Falls, WI': ['HQ', 'SAB', 'R&D'],
+};
+let empBand = null;
+
+// ── BUILD DOM ─────────────────────────────────────────────────
+function buildPermits() {
+  const pa = document.getElementById('permits-area');
+  PERMITS.forEach((p, i) => {
+    const d = document.createElement('div');
+    d.className = 'permit-row';
+    d.innerHTML = `
+      <div class="permit-lbl"><strong>${p.label}</strong><span>${p.sub}</span></div>
+      <div class="permit-btns">
+        <button class="yn-btn active-no" id="pn-${p.id}" onclick="togP('${p.id}','n')">No</button>
+        <button class="yn-btn" id="py-${p.id}" onclick="togP('${p.id}','y')">Yes</button>
+      </div>`;
+    pa.appendChild(d);
+  });
+}
+
+function togP(id, val) {
+  document.getElementById('py-'+id).className = val==='y' ? 'yn-btn active-yes' : 'yn-btn';
+  document.getElementById('pn-'+id).className = val==='n' ? 'yn-btn active-no'  : 'yn-btn';
+}
+
+function togGen(id, val) {
+  genState[id] = val==='y' ? 'Yes' : 'No';
+  document.getElementById(id+'-y').className = val==='y' ? 'yn-btn active-gen' : 'yn-btn';
+  document.getElementById(id+'-n').className = val==='n' ? 'yn-btn active-gen' : 'yn-btn';
+  autosaveDraft();
+}
+function setGen(id, val) {
+  const norm = (val===true||val==='Yes'||val==='yes') ? 'Yes' : (val===false||val==='No'||val==='no') ? 'No' : '';
+  genState[id] = norm;
+  const y=document.getElementById(id+'-y'), n=document.getElementById(id+'-n');
+  if(y) y.className = norm==='Yes' ? 'yn-btn active-gen' : 'yn-btn';
+  if(n) n.className = norm==='No'  ? 'yn-btn active-gen' : 'yn-btn';
+}
+
+function buildHazards() {
+  const ha = document.getElementById('hazards-area');
+  HAZ_GROUPS.forEach(g => {
+    const t = document.createElement('div');
+    t.className = 'haz-group-title';
+    t.textContent = g.group;
+    ha.appendChild(t);
+    g.items.forEach(item => {
+      hazState[item.id] = 'no';
+      const d = document.createElement('div');
+      d.innerHTML = `
+        <div class="yn-row">
+          <div class="yn-lbl"><strong>${item.label}</strong><span>${item.sub}</span></div>
+          <div class="yn-btns">
+            <button class="yn-btn active-no" id="hn-${item.id}" onclick="togH('${item.id}','no')">No</button>
+            <button class="yn-btn" id="hy-${item.id}" onclick="togH('${item.id}','yes')">Yes</button>
+          </div>
+        </div>
+        <div class="yn-expand" id="hexp-${item.id}">
+          <div class="yn-expand-grid">
+            <div><label>Comments / Cause</label><textarea id="hc-${item.id}" placeholder="Describe the specific source, location, or condition…"></textarea></div>
+            <div><label>Control / PPE Currently in Place</label><textarea id="hk-${item.id}" placeholder="What is already being done to manage this hazard?"></textarea></div>
+          </div>
+        </div>`;
+      ha.appendChild(d);
+    });
+  });
+}
+
+function togH(id, val) {
+  hazState[id] = val;
+  document.getElementById('hy-'+id).className = val==='yes' ? 'yn-btn active-yes' : 'yn-btn';
+  document.getElementById('hn-'+id).className = val==='no'  ? 'yn-btn active-no'  : 'yn-btn';
+  const ex = document.getElementById('hexp-'+id);
+  if (val==='yes') ex.classList.add('open'); else ex.classList.remove('open');
+  document.getElementById('sb-haz').textContent = Object.values(hazState).filter(v=>v==='yes').length;
+}
+
+// ── SECTION COLLAPSE ──────────────────────────────────────────
+function toggleSection(head) {
+  head.classList.toggle('collapsed');
+  const body = head.nextElementSibling;
+  body.classList.toggle('hidden');
+}
+
+// ── HEADER SYNC ───────────────────────────────────────────────
+function syncHeader() {
+  const a = document.getElementById('g-assessor').value;
+  const d = document.getElementById('g-date').value;
+  const site = resolveField('g-site','g-site-other');
+  const bldg = document.getElementById('g-bldg').value;
+  const dept = document.getElementById('g-dept').value;
+  if (a) document.getElementById('h-assessor').value = a;
+  if (d) document.getElementById('h-date').value = d;
+  const combo = [site, bldg, dept].filter(Boolean).join(' / ');
+  if (combo) document.getElementById('h-dept').value = combo;
+}
+
+
+// ── BUILDING DROPDOWN ──────────────────────────────────────────
+function updateBuildingOptions() {
+  const site = resolveField('g-site','g-site-other');
+  const buildingInput = document.getElementById('g-bldg');
+  const buildingSelect = document.getElementById('g-bldg-select');
+  if (!buildingInput || !buildingSelect) return;
+
+  const choices = BUILDINGS_BY_SITE[site] || [];
+  const current = buildingInput.value;
+
+  if (choices.length > 1) {
+    buildingSelect.innerHTML = '<option value="">— Select —</option>' +
+      choices.map(b => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join('');
+    buildingSelect.style.display = 'block';
+    buildingInput.style.display = 'none';
+    buildingInput.placeholder = 'Select building from dropdown';
+    buildingSelect.value = choices.includes(current) ? current : '';
+    buildingInput.value = buildingSelect.value;
+  } else {
+    buildingSelect.style.display = 'none';
+    buildingSelect.innerHTML = '<option value="">— Select —</option>';
+    buildingInput.style.display = 'block';
+    buildingInput.placeholder = 'e.g. Main Building, Plant 2';
+  }
+}
+
+function setBuildingFromSelect() {
+  const buildingInput = document.getElementById('g-bldg');
+  const buildingSelect = document.getElementById('g-bldg-select');
+  if (!buildingInput || !buildingSelect) return;
+  buildingInput.value = buildingSelect.value;
+  syncHeader();
+  autosaveDraft();
+}
+
+function syncBuildingSelect() {
+  const buildingInput = document.getElementById('g-bldg');
+  const buildingSelect = document.getElementById('g-bldg-select');
+  if (!buildingInput || !buildingSelect || buildingSelect.style.display === 'none') return;
+  buildingSelect.value = buildingInput.value;
+}
+
+function setBuildingValue(val) {
+  const buildingInput = document.getElementById('g-bldg');
+  const buildingSelect = document.getElementById('g-bldg-select');
+  if (!buildingInput || !buildingSelect) return;
+  buildingInput.value = val || '';
+  updateBuildingOptions();
+  if (buildingSelect.style.display !== 'none') {
+    buildingSelect.value = BUILDINGS_BY_SITE[resolveField('g-site','g-site-other')]?.includes(buildingInput.value) ? buildingInput.value : '';
+    buildingInput.value = buildingSelect.value;
+  }
+}
+
+// ── EMPLOYEE BAND ─────────────────────────────────────────────
+function setEmp(band) {
+  empBand = band;
+  // Clear the empBand validation highlight
+  const rule = VALIDATION_RULES.find(r => r.key === 'empBand');
+  if (rule) rule.clearHighlight();
+  // Reveal Step 4 / 5 / RPI on first band selection
+  document.getElementById('step4-placeholder').style.display = 'none';
+  document.getElementById('step4-wrap').style.display = 'block';
+  // Mark toggle as resolved so dashed "please select" styling clears
+  document.querySelector('.emp-toggle').classList.add('emp-selected');
+  const sm = band === 'sm';
+  document.getElementById('etb-sm').className = sm ? 'emp-btn active-sm' : 'emp-btn';
+  document.getElementById('etb-lg').className = !sm ? 'emp-btn active-lg' : 'emp-btn';
+  if (sm) {
+    document.getElementById('exp2').value='0'; document.getElementById('dur2').value='0';
+    document.querySelectorAll('.ref-table-lg .ref-row').forEach(r=>r.classList.remove('ref-selected'));
+  } else {
+    document.getElementById('exp1').value='0'; document.getElementById('dur1').value='0';
+    document.querySelectorAll('.ref-table-sm .ref-row').forEach(r=>r.classList.remove('ref-selected'));
+  }
+  updateRefTables(band);
+  updateBandSummary();
+  calc();
+}
+
+// ── INTERACTIVE REF TABLE HELPERS ────────────────────────────
+function updateRefTables(band) {
+  const sm = band === 'sm';
+  document.querySelectorAll('.ref-table-sm').forEach(el => el.classList.toggle('ref-locked', !sm));
+  document.querySelectorAll('.ref-table-lg').forEach(el => el.classList.toggle('ref-locked', sm));
+  const bs = document.getElementById('band-summary');
+  if (bs) bs.style.display = 'flex';
+}
+
+function updateBandSummary() {
+  const labelMap = {
+    exp1: ['1—Periodically','2—Occasionally','3—Frequently'],
+    dur1: ['1—<5 min','2—5–10 min','3—>10 min','4—Continuous'],
+    exp2: ['1—N/A','2—Periodically','3—Occasionally','4—Frequently'],
+    dur2: ['1—N/A','2—<5 min','3—5–10 min','4—>10 min','5—Continuous']
+  };
+  ['exp1','dur1','exp2','dur2'].forEach(id => {
+    const val = parseInt(document.getElementById(id).value)||1;
+    const el = document.getElementById('bs-'+id);
+    if (el) el.textContent = labelMap[id][val-1] || val;
+  });
+}
+
+function pickRef(selectId, val, row) {
+  if (row.closest('table').classList.contains('ref-locked')) return;
+  const sel = document.getElementById(selectId);
+  sel.value = String(val);
+  row.closest('tbody').querySelectorAll('tr').forEach(r => r.classList.remove('ref-selected'));
+  row.classList.add('ref-selected');
+  updateBandSummary();
+  calc();
+}
+
+function pickRef4(selectId, val, row) {
+  const sel = document.getElementById(selectId);
+  sel.value = String(val);
+  row.closest('tbody').querySelectorAll('tr').forEach(r => r.classList.remove('ref-selected'));
+  row.classList.add('ref-selected');
+  // Clear highlight for whichever scoring table this belongs to
+  const tableId = row.closest('table').id;
+  const keyMap = { 'reft-prob':'prob', 'reft-sev':'sev', 'reft-ctrl':'ctrl' };
+  const ruleKey = keyMap[tableId];
+  if (ruleKey) {
+    const rule = VALIDATION_RULES.find(r => r.key === ruleKey);
+    if (rule) rule.clearHighlight();
+  }
+  calc();
+}
+
+// ── CALC ──────────────────────────────────────────────────────
+function setDesc(map, val, elId) {
+  const el = document.getElementById(elId);
+  if (el) el.textContent = map[val] || '';
+}
+function setSD(id, val, isNA) {
+  const el = document.getElementById(id);
+  el.textContent = val;
+  el.className = 'score-display' + (isNA ? ' na' : '');
+}
+
+function calc() {
+  const e1 = parseInt(document.getElementById('exp1').value)||0;
+  const d1 = parseInt(document.getElementById('dur1').value)||0;
+  const e2 = parseInt(document.getElementById('exp2').value)||0;
+  const d2 = parseInt(document.getElementById('dur2').value)||0;
+  const prob = parseInt(document.getElementById('sc-prob').value)||0;
+  const sev  = parseInt(document.getElementById('sc-sev').value)||0;
+  const ctrl = document.getElementById('sc-ctrl').value;
+
+  setDesc(EXP1_D, e1, 'exp1-desc'); setDesc(DUR1_D, d1, 'dur1-desc');
+  setDesc(EXP2_D, e2, 'exp2-desc'); setDesc(DUR2_D, d2, 'dur2-desc');
+  if (prob) setDesc(PROB_D, prob, 'prob-desc');
+  if (sev)  setDesc(SEV_D,  sev,  'sev-desc');
+  if (ctrl !== '') setDesc(CTRL_D, parseInt(ctrl), 'ctrl-desc');
+
+  const smActive = empBand === 'sm';
+  const lgActive = empBand === 'lg';
+  document.querySelectorAll('.sd-band-sm').forEach(el => el.style.display = smActive ? '' : 'none');
+  document.querySelectorAll('.sd-band-lg').forEach(el => el.style.display = lgActive ? '' : 'none');
+  if (smActive) { setSD('sd-exp1', e1, false); setSD('sd-dur1', d1, false); }
+  if (lgActive) { setSD('sd-exp2', e2, false); setSD('sd-dur2', d2, false); }
+  setSD('sd-prob', prob||'—', !prob); setSD('sd-sev', sev||'—', !sev);
+  if (ctrl !== '') setSD('sd-ctrl', ctrl, false); else setSD('sd-ctrl', '—', true);
+
+  document.getElementById('sb-prob').textContent = prob || '—';
+  document.getElementById('sb-sev').textContent  = sev  || '—';
+
+  if (!empBand || !prob || !sev || ctrl === '') {
+    const sumSoFar = e1+d1+e2+d2;
+    document.getElementById('rpi-num').textContent = '—';
+    document.getElementById('rpi-pill').textContent = 'Not scored';
+    document.getElementById('rpi-pill').className = 'rpi-pill pill-n';
+    document.getElementById('sb-rpi').textContent = '—';
+    document.getElementById('sb-rpi').style.color = 'var(--gray-400)';
+    document.getElementById('rpi-formula').innerHTML = empBand
+      ? (() => {
+        const bStr = empBand==='sm'
+          ? `Exp&#8321; ${e1} + Dur&#8321; ${d1}`
+          : `Exp&#8322; ${e2} + Dur&#8322; ${d2}`;
+        return `Exposure + Duration sum: (${bStr}) = <strong>${sumSoFar}</strong> &mdash; complete Probability, Severity, and Control to finish.`;
+      })()
+      : 'Select employee band first, then complete all scoring fields.';
+    return;
+  }
+
+  const ctrlNum = parseInt(ctrl);
+  const sumED = e1+d1+e2+d2;
+
+  if (ctrlNum === 0) {
+    document.getElementById('rpi-num').textContent = '0';
+    document.getElementById('rpi-num').style.color = 'var(--green)';
+    document.getElementById('rpi-pill').textContent = 'Eliminated — no residual risk';
+    document.getElementById('rpi-pill').className = 'rpi-pill pill-l';
+    document.getElementById('sb-rpi').textContent = '0';
+    document.getElementById('sb-rpi').style.color = 'var(--green)';
+    document.getElementById('rpi-formula').innerHTML = 'Control = 0 (Elimination). The hazard no longer exists — RPI = 0 by design.';
+    return;
+  }
+
+  const mult = prob * sev * ctrlNum;
+  const rpi  = Math.round(sumED * mult);
+  let lvl, cls, col;
+  if (rpi >= 150)     { lvl='High risk';   cls='pill-h'; col='var(--red)'; }
+  else if (rpi >= 50) { lvl='Medium risk'; cls='pill-m'; col='var(--amber)'; }
+  else                { lvl='Low risk';    cls='pill-l'; col='var(--green)'; }
+
+  document.getElementById('rpi-num').textContent = rpi;
+  document.getElementById('rpi-num').style.color = col;
+  document.getElementById('rpi-pill').textContent = lvl;
+  document.getElementById('rpi-pill').className = 'rpi-pill ' + cls;
+  document.getElementById('sb-rpi').textContent = rpi;
+  document.getElementById('sb-rpi').style.color = col;
+  const bandStr = smActive
+    ? `Exp&#8321; <strong>${e1}</strong> + Dur&#8321; <strong>${d1}</strong>`
+    : `Exp&#8322; <strong>${e2}</strong> + Dur&#8322; <strong>${d2}</strong>`;
+  document.getElementById('rpi-formula').innerHTML =
+    `(${bandStr}) = <strong>${sumED}</strong><br>
+     &times; Probability <strong>${prob}</strong> &times; Severity <strong>${sev}</strong> &times; Control <strong>${ctrlNum}</strong>
+     = <strong>${sumED} &times; ${mult} = ${rpi}</strong>`;
+}
+
+// ── HELPERS ───────────────────────────────────────────────────
+function v(id) { return (document.getElementById(id)||{}).value||''; }
+function selTxt(id) { const s=document.getElementById(id); return s&&s.selectedIndex>=0?s.options[s.selectedIndex].text:'—'; }
+function chk(id) { const el=document.getElementById(id); return el && el.checked ? 'Yes' : 'No'; }
+function setChk(id,val) { const el=document.getElementById(id); if(el) el.checked = (val===true || val==='Yes' || val==='yes'); }
+// Re-assessment: when an original record ID is entered, auto-bump revision to 2
+function onParentIdChange() {
+  const pid = v('sc-parentid').trim();
+  const rev = document.getElementById('sc-rev');
+  const hint = document.getElementById('rev-hint');
+  if (pid) {
+    if (rev.value === '1') rev.value = '2';
+    if (hint) hint.textContent = 'Re-assessment of record #' + pid + ' \u2014 set to the next revision';
+  } else {
+    rev.value = '1';
+    if (hint) hint.textContent = 'New assessments are Revision 1';
+  }
+}
+function ppeValue() {
+  const std = document.getElementById('g-ppe-std') && document.getElementById('g-ppe-std').checked;
+  const add = v('g-ppe').trim();
+  const parts = [];
+  if (std) parts.push('Standard PPE (safety glasses, safety shoes, gloves)');
+  if (add) parts.push(add);
+  return parts.join('; ');
+}
+
+function toggleOther(selectId, otherId) {
+  const sel = document.getElementById(selectId);
+  const other = document.getElementById(otherId);
+  if (!sel || !other) return;
+  other.style.display = sel.value === 'Other' ? 'block' : 'none';
+  if (sel.value !== 'Other') other.value = '';
+}
+
+function resolveField(selectId, otherId) {
+  const sel = v(selectId);
+  if (sel === 'Other') { const o = v(otherId); return o ? o : 'Other'; }
+  return sel;
+}
+
+// ── SESSION STORAGE ────────────────────────────────────────────
+const STORE_KEY = 'cmco_blitz_tasks_v1';
+const DRAFT_KEY = 'cmco_blitz_draft_v1';
+
+const SHAREPOINT_WEBHOOK_URL = 'https://ea6430473e5ee4109f1c7dfe1fb37b.13.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/dcd6aea2d03040d7b29f58e0e1a37932/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=5_8f61CTSOpuRUu2XE4dtWRCIXJ2uzuxRAxdfREavD0';
+let sessionTasks = [];
+let editingIndex = -1;  // -1 = not editing; otherwise the index of the task being edited
+
+function loadSession() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    sessionTasks = raw ? JSON.parse(raw) : [];
+  } catch(e) { sessionTasks = []; }
+  renderSession();
+}
+function persistSession() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(sessionTasks)); } catch(e) {}
+}
+
+function renderSession() {
+  const panel = document.getElementById('session-panel');
+  const count = document.getElementById('session-count');
+  const list  = document.getElementById('session-list');
+  const dupBar = document.getElementById('dup-info-bar');
+  if (dupBar) dupBar.style.display = sessionTasks.length > 0 ? 'block' : 'none';
+  if (sessionTasks.length === 0) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block';
+  count.textContent = sessionTasks.length;
+  list.innerHTML = sessionTasks.map((t, i) => {
+    const cls = t.rpiLevel==='High'?'h':t.rpiLevel==='Medium'?'m':'l';
+    return `<div class="session-item">
+      <span class="si-task si-open" onclick="openTask(${i})" title="Click to open and edit this task">${escapeHtml(t.job||'(untitled task)')}</span>
+      <span class="si-meta">${escapeHtml(t.site||'—')} · ${escapeHtml(t.dept||'—')} · ${escapeHtml(t.date||'—')} · ${t.hazCount} hazard(s)</span>
+      <span class="si-rpi ${cls}">RPI ${t.rpi}</span>
+      <button class="si-edit" onclick="openTask(${i})" title="Open and edit this task">Edit</button>
+      <button class="si-del" onclick="deleteTask(${i})" title="Delete this task">&times;</button>
+    </div>`;
+  }).join('');
+}
+
+function duplicateGeneralInfo() {
+  if (sessionTasks.length === 0) { alert('No saved tasks yet to copy from.'); return; }
+  const last = sessionTasks[sessionTasks.length - 1];
+  const set = (id,val) => { const el=document.getElementById(id); if(el!=null && val!=null) el.value=val; };
+  const siteOpts = ['Arlington, TX','Attalla, AL','Brighton, MI','Chattanooga, TN','Clackamas, OR','Corona, CA','Elizabethtown, PA','Hartland, WI','LaVergne, TN','Little Rock, AR','Longview, TX','Manheim, PA','Menomonee Falls, WI','Mt. Pleasant, PA','Necedah, WI','South Holland, IL','Tulsa, OK','Wadesboro, NC','Watertown, SD','Winona, MN','York, PA'];
+  if (siteOpts.indexOf(last.site)>=0) { set('g-site',last.site); set('g-site-other',''); document.getElementById('g-site-other').style.display='none'; }
+  else if (last.site) { set('g-site','Other'); toggleOther('g-site','g-site-other'); set('g-site-other',last.site); }
+  setBuildingValue(last.bldg);
+  set('g-dept',last.dept);
+  set('g-area',last.area);
+  set('g-equip',last.equip);
+  set('g-freq',last.freq);
+  set('g-dur',last.dur);
+  setGen('g-routine',last.routine);
+  setGen('g-down',last.down);
+  setGen('g-sop',last.sop);
+  set('g-sopnum',last.sopnum);
+  set('g-ppe',last.ppeAdd!==undefined?last.ppeAdd:'');
+  { const cb=document.getElementById('g-ppe-std'); if(cb) cb.checked = last.ppeStd!==undefined ? !!last.ppeStd : true; }
+  set('g-swc',last.swc);
+  syncHeader();
+  autosaveDraft();
+  const btn = document.querySelector('.btn-dup');
+  if (btn) { const o=btn.innerHTML; btn.innerHTML='\u2713 Copied — job/task & scores left blank'; setTimeout(()=>btn.innerHTML=o, 1800); }
+}
+
+function toggleSessionList() {
+  const list = document.getElementById('session-list');
+  const btn = document.getElementById('session-toggle');
+  const showing = list.style.display !== 'none';
+  list.style.display = showing ? 'none' : 'flex';
+  btn.textContent = showing ? 'Show list' : 'Hide list';
+}
+
+function deleteTask(i) {
+  if (!confirm('Remove this saved task from the session?')) return;
+  sessionTasks.splice(i, 1);
+  persistSession();
+  renderSession();
+}
+
+// Open a saved task back into the form for editing
+function openTask(i) {
+  const t = sessionTasks[i];
+  if (!t) return;
+  clearForm(true);          // silently clear the form first
+  applyData(t);             // restore all the saved values
+  editingIndex = i;         // remember we're editing this one, so Save updates instead of duplicating
+  // Visual cue + scroll to top so the user sees the loaded task
+  const banner = document.getElementById('editing-banner');
+  if (banner) { banner.style.display = 'flex'; document.getElementById('editing-task-name').textContent = t.job || '(untitled task)'; }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Cancel editing mode (clears the form and the editing flag)
+function cancelEditing() {
+  editingIndex = -1;
+  const banner = document.getElementById('editing-banner');
+  if (banner) banner.style.display = 'none';
+  clearForm(true);
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function gatherFormData() {
+  const allItems = HAZ_GROUPS.flatMap(g => g.items);
+  const hazards = allItems.filter(i => hazState[i.id]==='yes').map(i => ({
+    label: i.label,
+    cause: v('hc-'+i.id),
+    control: v('hk-'+i.id)
+  }));
+  const permits = PERMITS.map(p => {
+    const y = document.getElementById('py-'+p.id);
+    return { label: p.label, applies: y && y.classList.contains('active-yes') ? 'Yes':'No' };
+  });
+  const incidents = [1,2,3].map(i => ({ date: v('inc-d-'+i), desc: v('inc-t-'+i) }))
+    .filter(x => x.date || x.desc);
+
+  const e1=parseInt(v('exp1'))||0, d1=parseInt(v('dur1'))||0;
+  const e2=parseInt(v('exp2'))||0, d2=parseInt(v('dur2'))||0;
+  const prob=parseInt(v('sc-prob'))||0, sev=parseInt(v('sc-sev'))||0;
+  const ctrl=v('sc-ctrl');
+  const rpiTxt = document.getElementById('rpi-num').textContent;
+  const rlvlTxt = document.getElementById('rpi-pill').textContent;
+  let rpiLevel = 'Low';
+  if (rlvlTxt.indexOf('High')>=0) rpiLevel='High';
+  else if (rlvlTxt.indexOf('Medium')>=0) rpiLevel='Medium';
+  else if (rlvlTxt.indexOf('Eliminated')>=0) rpiLevel='Low';
+
+  return {
+    assessor: v('g-assessor'), emp: v('g-emp'), date: v('g-date'),
+    site: resolveField('g-site','g-site-other'),
+    bldg: v('g-bldg'),
+    dept: v('g-dept'),
+    area: v('g-area'), job: v('g-job'), equip: v('g-equip'),
+    freq: v('g-freq'), dur: v('g-dur'), routine: genState['g-routine'],
+    down: genState['g-down'], sop: genState['g-sop'], sopnum: v('g-sopnum'),
+    ppe: ppeValue(), ppeStd: document.getElementById('g-ppe-std').checked, ppeAdd: v('g-ppe'), swc: v('g-swc'),
+    permits, hazards, incidents,
+    empBand: empBand==='sm'?'1-3':empBand==='lg'?'4+':'',
+    exp1:e1, dur1:d1, exp2:e2, dur2:d2,
+    prob, sev, ctrl: ctrl===''?'':parseInt(ctrl),
+    rpi: rpiTxt, rpiLevel,
+    rev: v('sc-rev'), parentId: v('sc-parentid'), notes: v('sc-notes'),
+    hazCount: hazards.length,
+    savedAt: new Date().toISOString()
+  };
+}
+
+// ── VALIDATION FIELD MAP ──────────────────────────────────────
+// Each entry: { label, check(), highlight(), clearHighlight(), inputIds[] }
+const VALIDATION_RULES = [
+  {
+    key: 'assessor',
+    label: 'Assessor name',
+    check: () => !!v('g-assessor'),
+    inputIds: ['g-assessor'],
+    highlight() {
+      document.getElementById('g-assessor').closest('.field').classList.add('field-error');
+      // expand section 1 if collapsed
+      expandSectionContaining('g-assessor');
+    },
+    clearHighlight() {
+      const el = document.getElementById('g-assessor');
+      if (el) el.closest('.field').classList.remove('field-error');
+    }
+  },
+  {
+    key: 'site',
+    label: 'Site',
+    check: () => !!v('g-site'),
+    inputIds: ['g-site'],
+    highlight() {
+      document.getElementById('g-site').closest('.field').classList.add('field-error');
+      expandSectionContaining('g-site');
+    },
+    clearHighlight() {
+      const el = document.getElementById('g-site');
+      if (el) el.closest('.field').classList.remove('field-error');
+    }
+  },
+  {
+    key: 'job',
+    label: 'Job / task description',
+    check: () => !!v('g-job'),
+    inputIds: ['g-job'],
+    highlight() {
+      document.getElementById('g-job').closest('.field').classList.add('field-error');
+      expandSectionContaining('g-job');
+    },
+    clearHighlight() {
+      const el = document.getElementById('g-job');
+      if (el) el.closest('.field').classList.remove('field-error');
+    }
+  },
+  {
+    key: 'dept',
+    label: 'Department',
+    check: () => !!v('g-dept'),
+    inputIds: ['g-dept'],
+    highlight() {
+      document.getElementById('g-dept').closest('.field').classList.add('field-error');
+      expandSectionContaining('g-dept');
+    },
+    clearHighlight() {
+      const el = document.getElementById('g-dept');
+      if (el) el.closest('.field').classList.remove('field-error');
+    }
+  },
+  {
+    key: 'empBand',
+    label: 'Employee band (Step 1)',
+    check: () => !!empBand,
+    inputIds: [],
+    highlight() {
+      document.querySelector('.emp-toggle').classList.add('emp-toggle-error');
+      expandSectionContaining('etb-sm');
+    },
+    clearHighlight() {
+      const el = document.querySelector('.emp-toggle');
+      if (el) el.classList.remove('emp-toggle-error');
+    }
+  },
+  {
+    key: 'prob',
+    label: 'Probability score',
+    check: () => !!v('sc-prob'),
+    inputIds: ['sc-prob'],
+    highlight() {
+      document.getElementById('reft-prob').classList.add('ref-table-error');
+      expandSectionContaining('reft-prob');
+    },
+    clearHighlight() {
+      const el = document.getElementById('reft-prob');
+      if (el) el.classList.remove('ref-table-error');
+    }
+  },
+  {
+    key: 'sev',
+    label: 'Severity score',
+    check: () => !!v('sc-sev'),
+    inputIds: ['sc-sev'],
+    highlight() {
+      document.getElementById('reft-sev').classList.add('ref-table-error');
+      expandSectionContaining('reft-sev');
+    },
+    clearHighlight() {
+      const el = document.getElementById('reft-sev');
+      if (el) el.classList.remove('ref-table-error');
+    }
+  },
+  {
+    key: 'ctrl',
+    label: 'Control score',
+    check: () => v('sc-ctrl') !== '',
+    inputIds: ['sc-ctrl'],
+    highlight() {
+      document.getElementById('reft-ctrl').classList.add('ref-table-error');
+      expandSectionContaining('reft-ctrl');
+    },
+    clearHighlight() {
+      const el = document.getElementById('reft-ctrl');
+      if (el) el.classList.remove('ref-table-error');
+    }
+  },
+];
+
+function expandSectionContaining(elementId) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  const body = el.closest('.section-body');
+  if (body && body.classList.contains('hidden')) {
+    body.classList.remove('hidden');
+    const head = body.previousElementSibling;
+    if (head) head.classList.remove('collapsed');
+  }
+}
+
+function clearAllHighlights() {
+  VALIDATION_RULES.forEach(r => r.clearHighlight());
+}
+
+function validateForm() {
+  return VALIDATION_RULES.filter(r => !r.check()).map(r => r.label);
+}
+
+function highlightMissingFields(missing) {
+  // Clear any existing highlights first
+  clearAllHighlights();
+  VALIDATION_RULES.forEach(r => {
+    if (missing.includes(r.label)) r.highlight();
+  });
+  // Wire up auto-clear: when the user fills a field, remove its highlight
+  VALIDATION_RULES.forEach(r => {
+    r.inputIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const clear = () => { if (r.check()) r.clearHighlight(); };
+      el.addEventListener('input', clear, { once: false });
+      el.addEventListener('change', clear, { once: false });
+    });
+  });
+}
+
+function showValidation(missing) {
+  const box = document.getElementById('validation-warn');
+  if (missing.length === 0) {
+    box.classList.remove('show');
+    clearAllHighlights();
+    return true;
+  }
+  box.innerHTML = '<strong>' + missing.length + ' field(s) still empty — highlighted below:</strong><ul>' +
+    missing.map(m => '<li>'+escapeHtml(m)+'</li>').join('') + '</ul>';
+  box.classList.add('show');
+  highlightMissingFields(missing);
+  // Scroll to the first highlighted element
+  const firstEl = (() => {
+    for (const r of VALIDATION_RULES) {
+      if (!missing.includes(r.label)) continue;
+      if (r.inputIds.length) return document.getElementById(r.inputIds[0]);
+      if (r.key === 'empBand') return document.querySelector('.emp-toggle');
+    }
+    return box;
+  })();
+  if (firstEl) firstEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  return false;
+}
+
+// ── SUBMIT HELPERS ────────────────────────────────────────────
+let _lastPayload = null; // held for retry on error
+
+function buildPayload(data) {
+  // Flat Power Automate / Dataverse payload:
+  //  - Send every fixed field as a top-level JSON property
+  //  - Send every permit as Permit_<id>
+  //  - Send every hazard as Haz_<id>, Haz_<id>_Cause, Haz_<id>_Control
+  //  - Send all 3 incident slots even when blank
+  //  - Remove nested arrays so the HTTP body is one flat record
+  const payload = Object.assign({}, data, {
+    permitsYes:  (data.permits||[]).filter(p=>p.applies==='Yes').map(p=>p.label).join('; '),
+    hazardList:  (data.hazards||[]).map(h=>h.label).join('; '),
+    hazardDetail:(data.hazards||[]).map(h=>`${h.label} [Cause: ${h.cause||'-'} | Control: ${h.control||'-'}]`).join(' || '),
+    incidentList:[1,2,3].map(i => {
+      const date = v('inc-d-'+i);
+      const desc = v('inc-t-'+i);
+      return (date || desc) ? `${date||'-'}: ${desc||'-'}` : '';
+    }).filter(Boolean).join(' || ')
+  });
+
+  const safeId = id => String(id).replace(/-/g, '_');
+
+  // 6 permit columns: Permit_loto, Permit_cs, Permit_ewp, etc.
+  PERMITS.forEach(p => {
+    const y = document.getElementById('py-'+p.id);
+    payload['Permit_'+safeId(p.id)] = (y && y.classList.contains('active-yes')) ? 'Yes' : 'No';
+  });
+
+  // All hazard columns, not just the hazards marked Yes.
+  // Example: fly-obj -> Haz_fly_obj, Haz_fly_obj_Cause, Haz_fly_obj_Control
+  HAZ_GROUPS.flatMap(g => g.items).forEach(h => {
+    const key = safeId(h.id);
+    const y = document.getElementById('hy-'+h.id);
+    const isYes = y && y.classList.contains('active-yes');
+    payload['Haz_'+key] = isYes ? 'Yes' : 'No';
+    payload['Haz_'+key+'_Cause'] = isYes ? v('hc-'+h.id) : '';
+    payload['Haz_'+key+'_Control'] = isYes ? v('hk-'+h.id) : '';
+  });
+
+  // Always send the 3 fixed incident slots so the receiving schema stays stable.
+  [1,2,3].forEach(i => {
+    payload['Incident'+i+'Date'] = v('inc-d-'+i);
+    payload['Incident'+i+'Desc'] = v('inc-t-'+i);
+  });
+
+  // Remove nested collections so Power Automate receives one flat object.
+  delete payload.permits;
+  delete payload.hazards;
+  delete payload.incidents;
+
+  return payload;
+}
+
+function showSuccessOverlay() {
+  const overlay = document.getElementById('success-overlay');
+  const fill = document.getElementById('success-bar-fill');
+  const DURATION = 3000; // ms before auto-dismiss
+  overlay.classList.add('show');
+  // Animate the progress bar shrinking left-to-right
+  fill.style.transition = 'none';
+  fill.style.transform = 'scaleX(1)';
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      fill.style.transition = `transform ${DURATION}ms linear`;
+      fill.style.transform = 'scaleX(0)';
+    });
+  });
+  setTimeout(() => {
+    overlay.classList.remove('show');
+    // Soft-clear: keep assessor + date, wipe everything else
+    const keep = {
+      assessor: v('g-assessor'),
+      date: v('g-date'),
+      site: v('g-site'),
+      siteOther: v('g-site-other'),
+      bldg: v('g-bldg'),
+      dept: v('g-dept')
+    };
+    clearForm(true);
+    document.getElementById('g-assessor').value = keep.assessor;
+    document.getElementById('h-assessor').value = keep.assessor;
+    document.getElementById('g-date').value = keep.date;
+    document.getElementById('h-date').value = keep.date;
+    document.getElementById('g-site').value = keep.site;
+    toggleOther('g-site','g-site-other');
+    if (keep.siteOther) document.getElementById('g-site-other').value = keep.siteOther;
+    setBuildingValue(keep.bldg);
+    document.getElementById('g-dept').value = keep.dept;
+    syncHeader();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }, DURATION + 300);
+}
+
+function showErrorBanner(msg) {
+  const banner = document.getElementById('error-banner');
+  document.getElementById('error-banner-msg').textContent = msg;
+  banner.classList.add('show');
+  banner.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+}
+
+function dismissError() {
+  document.getElementById('error-banner').classList.remove('show');
+}
+
+async function retrySubmit() {
+  dismissError();
+  if (_lastPayload) {
+    await _doFetch(_lastPayload);
+  }
+}
+
+async function _doFetch(payload) {
+  const btn = document.getElementById('btn-submit-sp');
+  const SEND_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`;
+  const SPIN_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin .8s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
+  btn.innerHTML = `${SPIN_ICON} Submitting…`; btn.disabled = true;
+  try {
+    const res = await fetch(SHAREPOINT_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      btn.innerHTML = `Submit ${SEND_ICON}`; btn.disabled = false;
+      _lastPayload = null;
+      showSuccessOverlay();
+    } else {
+      throw new Error(`Server returned HTTP ${res.status} — the form may not have been received.`);
+    }
+  } catch (e) {
+    btn.innerHTML = `Submit ${SEND_ICON}`; btn.disabled = false;
+    const isNetwork = e instanceof TypeError;
+    showErrorBanner(isNetwork
+      ? 'No response from server. Check your network connection and try again.'
+      : e.message);
+  }
+}
+
+async function submitToSharePoint() {
+  if (!SHAREPOINT_WEBHOOK_URL) {
+    alert('No SharePoint webhook configured. Add the Power Automate URL to SHAREPOINT_WEBHOOK_URL near the top of the script.');
+    return;
+  }
+  dismissError();
+  const missing = validateForm();
+  if (missing.length > 0) {
+    showValidation(missing);
+    return;
+  }
+  const data = gatherFormData();
+  if (editingIndex >= 0 && editingIndex < sessionTasks.length) {
+    sessionTasks[editingIndex] = data;   // update the task we reopened
+    editingIndex = -1;
+    const banner = document.getElementById('editing-banner');
+    if (banner) banner.style.display = 'none';
+  } else {
+    sessionTasks.push(data);             // brand-new task
+  }
+  persistSession(); renderSession();
+  const payload = buildPayload(data);
+  _lastPayload = payload; // keep for retry
+  await _doFetch(payload);
+}
+
+function autosaveDraft() {
+  try { localStorage.setItem(DRAFT_KEY, JSON.stringify(gatherFormData())); } catch(e) {}
+}
+function restoreDraftPrompt() {
+  let draft;
+  try { draft = JSON.parse(localStorage.getItem(DRAFT_KEY)||'null'); } catch(e) { draft = null; }
+  if (!draft || (!draft.job && !draft.assessor)) return;
+  if (!confirm('An unfinished assessment was found from your last session. Restore it?')) {
+    localStorage.removeItem(DRAFT_KEY);
+    return;
+  }
+  applyData(draft);
+}
+function applyData(d) {
+  const set = (id,val) => { const el=document.getElementById(id); if(el!=null && val!=null) el.value=val; };
+  set('g-assessor',d.assessor); set('h-assessor',d.assessor);
+  set('g-emp',d.emp); set('g-date',d.date); set('h-date',d.date);
+  set('g-area',d.area); set('g-job',d.job); set('g-equip',d.equip);
+  set('g-freq',d.freq); set('g-dur',d.dur); setGen('g-routine',d.routine);
+  setGen('g-down',d.down); setGen('g-sop',d.sop); set('g-sopnum',d.sopnum);
+  set('g-ppe',d.ppeAdd!==undefined?d.ppeAdd:d.ppe); set('g-swc',d.swc); set('sc-notes',d.notes); set('sc-rev',d.rev); set('sc-parentid',d.parentId||'');
+  { const cb=document.getElementById('g-ppe-std'); if(cb) cb.checked = d.ppeStd!==undefined ? !!d.ppeStd : true; }
+  const siteOpts = ['Arlington, TX','Attalla, AL','Brighton, MI','Chattanooga, TN','Clackamas, OR','Corona, CA','Elizabethtown, PA','Hartland, WI','LaVergne, TN','Little Rock, AR','Longview, TX','Manheim, PA','Menomonee Falls, WI','Mt. Pleasant, PA','Necedah, WI','South Holland, IL','Tulsa, OK','Wadesboro, NC','Watertown, SD','Winona, MN','York, PA'];
+  if (siteOpts.indexOf(d.site)>=0) { set('g-site',d.site); }
+  else if (d.site) { set('g-site','Other'); toggleOther('g-site','g-site-other'); set('g-site-other',d.site); }
+  setBuildingValue(d.bldg);
+  set('g-dept',d.dept);
+  syncHeader();
+  (d.hazards||[]).forEach(h => {
+    const item = HAZ_GROUPS.flatMap(g=>g.items).find(i=>i.label===h.label);
+    if (item) { togH(item.id,'yes'); set('hc-'+item.id,h.cause); set('hk-'+item.id,h.control); }
+  });
+  (d.permits||[]).forEach(p => {
+    const pid = PERMITS.find(x=>x.label===p.label)?.id;
+    if (pid && p.applies==='Yes') togP(pid,'y');
+  });
+  (d.incidents||[]).forEach((inc,idx) => { set('inc-d-'+(idx+1),inc.date); set('inc-t-'+(idx+1),inc.desc); });
+  if (d.empBand==='1-3') setEmp('sm');
+  else if (d.empBand==='4+') setEmp('lg');
+  set('exp1',d.exp1); set('dur1',d.dur1); set('exp2',d.exp2); set('dur2',d.dur2);
+  set('sc-prob',d.prob||''); set('sc-sev',d.sev||''); set('sc-ctrl',d.ctrl===''?'':d.ctrl);
+  updateBandSummary();
+  calc();
+}
+
+function clearForm(silent) {
+  if (!silent && !confirm('Clear this entire assessment?\n\nAll fields, hazards, and scores will be reset. This cannot be undone.')) return;
+  document.querySelectorAll('input,select,textarea').forEach(el => {
+    if (el.type==='date'||el.type==='text'||el.type==='number'||el.tagName==='TEXTAREA') el.value='';
+    else if (el.tagName==='SELECT') el.selectedIndex=0;
+  });
+  { const h=document.getElementById('rev-hint'); if(h) h.textContent='New assessments are Revision 1'; }
+  ['g-site-other'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el.style.display='none';}});
+  updateBuildingOptions();
+  { const cb=document.getElementById('g-ppe-std'); if(cb) cb.checked = true; }
+  Object.keys(GEN_DEFAULTS).forEach(id => setGen(id, GEN_DEFAULTS[id]));
+  document.getElementById('validation-warn').classList.remove('show');
+  Object.keys(hazState).forEach(id => {
+    hazState[id]='no';
+    const hy=document.getElementById('hy-'+id), hn=document.getElementById('hn-'+id), ex=document.getElementById('hexp-'+id);
+    if(hy) hy.className='yn-btn'; if(hn) hn.className='yn-btn active-no'; if(ex) ex.classList.remove('open');
+  });
+  PERMITS.forEach(p => { const py=document.getElementById('py-'+p.id), pn=document.getElementById('pn-'+p.id); if(py)py.className='yn-btn'; if(pn)pn.className='yn-btn active-no'; });
+  empBand=null;
+  document.getElementById('etb-sm').className='emp-btn';
+  document.getElementById('etb-lg').className='emp-btn';
+  document.querySelector('.emp-toggle').classList.remove('emp-selected');
+  document.querySelectorAll('.ref-row').forEach(r=>r.classList.remove('ref-selected'));
+  ['exp1','dur1','exp2','dur2'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='0';});
+  ['sc-prob','sc-sev','sc-ctrl'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  
+  document.querySelectorAll('.ref-table-sm,.ref-table-lg').forEach(el=>el.classList.add('ref-locked'));
+  const bs=document.getElementById('band-summary'); if(bs) bs.style.display='none';
+  // Re-lock Step 4/5 until band is re-selected
+  document.getElementById('step4-placeholder').style.display = 'block';
+  document.getElementById('step4-wrap').style.display = 'none';
+  document.getElementById('sb-haz').textContent='0';
+  ['sb-rpi','sb-prob','sb-sev'].forEach(id=>{document.getElementById(id).textContent='—';document.getElementById(id).style.color='var(--gray-400)';});
+  document.getElementById('rpi-num').textContent='—'; document.getElementById('rpi-num').style.color='var(--blue)';
+  document.getElementById('rpi-pill').textContent='Not scored'; document.getElementById('rpi-pill').className='rpi-pill pill-n';
+  document.getElementById('rpi-formula').textContent='Complete employee band and all scoring fields to calculate.';
+  ['sd-exp1','sd-dur1','sd-exp2','sd-dur2','sd-prob','sd-sev','sd-ctrl'].forEach(id=>{const el=document.getElementById(id);el.textContent='—';el.className='score-display na';});
+  document.querySelectorAll('.sd-band-sm,.sd-band-lg').forEach(el=>el.style.display='none');
+  document.getElementById('g-date').valueAsDate=new Date();
+  document.getElementById('h-date').valueAsDate=new Date();
+  if (!silent) { try { localStorage.removeItem(DRAFT_KEY); } catch(e){} }
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+buildPermits();
+buildHazards();
+Object.keys(GEN_DEFAULTS).forEach(id => setGen(id, GEN_DEFAULTS[id]));
+
+document.querySelectorAll('.ref-table-sm,.ref-table-lg').forEach(el=>el.classList.add('ref-locked'));
+document.querySelectorAll('.sd-band-sm,.sd-band-lg').forEach(el=>el.style.display='none');
+document.getElementById('g-date').valueAsDate=new Date();
+document.getElementById('h-date').valueAsDate=new Date();
+updateBuildingOptions();
+loadSession();
+restoreDraftPrompt();
+document.addEventListener('input', () => { clearTimeout(window._asTimer); window._asTimer = setTimeout(autosaveDraft, 600); });
+document.addEventListener('change', () => { clearTimeout(window._asTimer); window._asTimer = setTimeout(autosaveDraft, 600); });
+</script>
+</body>
+</html>
